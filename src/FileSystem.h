@@ -7,6 +7,7 @@
 
 #include "librsfs.h"
 #include <stdio.h>
+#include <map>
 #include <boost/filesystem.hpp>
 #include <boost/range.hpp>
 #include <boost/algorithm/string.hpp>
@@ -25,6 +26,9 @@ public:
     static const FSResult RESULT_OK = 0;
     static const FSResult E_INVALID_DIRECTORY = 1;
     static const FSResult E_NO_MAINFILE = 2;
+
+private:
+    std::map<int, filesystem::path*> validIndices;
 
 };
 

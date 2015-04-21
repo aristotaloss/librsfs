@@ -25,12 +25,21 @@ FSResult FileSystem::loadDirectory(char *directory) {
     }
 
     // Load all the *.idx files
-    std::vector<filesystem::path> validIndices; // Vector to hold our .idx file paths
+    std::map<int, filesystem::path*> validIndices; // Map to hold our .idx file paths
     for (filesystem::directory_entry e : make_iterator_range(filesystem::directory_iterator(directory))) { // Loop
-        if (starts_with(e.path().extension().string(), ".idx")) { // Is this an index descriptor?
-            printf(".idx entry: %s\n", e.path().string().c_str());
+        if (starts_with(e.path().extension().string(), ".idx") && e.path().string().size() > 4) { // Is this an index descriptor?
+            int idxId = atoi(e.path().extension().string().substr(4).c_str()); // Substring from 4, parse as integer.
+
+            // Check if the range is valid. If so, store it in our map.
+            if (idxId >= 0 && idxId <= 255) {
+                validIndices[idxId] = new filesystem::path(e); // Copy, otherwise it falls out of scope
+            }
         }
     }
 
-    return FileSystem::RESULT_OK;
+    // Set this instance's map to the allocated one
+    this->validIndices = validIndices;
+
+
+    return FileSystem::RESULT_OK; // All good.
 }
