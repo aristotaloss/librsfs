@@ -12,7 +12,9 @@
 #include <boost/range.hpp>
 #include <boost/algorithm/string.hpp>
 
-using namespace boost; // Save some typing
+using namespace std;
+using namespace boost;
+using namespace boost::filesystem;
 
 typedef int FSResult;
 
