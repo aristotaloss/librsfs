@@ -18,13 +18,40 @@ using namespace boost::filesystem;
 
 typedef int FSResult;
 
+
+/**
+ * Filesystem base class which will hold the main file reference and also contains a map of all the indices.
+ * After constructing a new FileSystem, use FileSystem#loadDirectory(char*).
+ */
 class RSFS_EXPORT FileSystem {
 
 public:
     FileSystem();
     ~FileSystem();
+
+    /**
+     * Load a file system from the specified path. A valid file system requires at least a main_file_cache.dat2
+     * file and anywhere from one to 255 .idx<num> files, .idx255 being mandatory.
+     *
+     * @return FileSystem::E_INVALID_DIRECTORY if the directory was non-existant, a file, or unreadable.
+     * @return FileSystem::E_NO_MAINFILE if the directory contained no main_file_cache.dat2 entry.
+     * @return FileSystem::RESULT_OK if the file system was loaded successfully.
+     */
     RSFS_EXPORT FSResult loadDirectory(char *);
+
+    /**
+     * Gets the number of (valid) indices in the file store. This method will yield 0 if the file system has not
+     * yet been loaded. This does not take the .idx255 file into the final result. Only 0-254 indices are counted.
+     *
+     * @return The number of valid indices found in this file system, excluding the .idx255 file.
+     */
     RSFS_EXPORT int getIndexCount();
+
+    /**
+     * Checks if this file system contains the specified index. If this file store was not loaded, this will always return
+     * <code>false</code>. If an index is present, this will return <code>true</code> unless the passed index id is 255,
+     * since the .idx255 file is not taken into consideration.
+     */
     RSFS_EXPORT bool hasIndex(int);
 
     static const FSResult RESULT_OK = 0;
