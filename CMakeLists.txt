@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 3.1)
 project(librsfs)
-include (GenerateExportHeader)
+include(GenerateExportHeader)
 
 # Boost configuration
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-set(CMAKE_SOURCE_DIR ./)
-set(Boost_INCLUDE_DIR C:\\boost_1_58_0)
-set(Boost_LIBRARY_DIR C:\\boost_1_58_0\\stage\\lib)
+
+# Warn when there is no BOOST_ROOT defined (which will result in the project not compiling).
+if((NOT DEFINED BOOST_ROOT) OR (NOT IS_DIRECTORY BOOST_ROOT))
+    message(WARNING "No BOOST_ROOT defined. If CMake fails, please set a compiler flag to:")
+    message(WARNING "-D BOOST_ROOT=boostpathhere.")
+endif()
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
