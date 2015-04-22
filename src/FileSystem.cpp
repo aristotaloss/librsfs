@@ -48,3 +48,18 @@ FSResult FileSystem::loadDirectory(char *directory) {
 
     return FileSystem::RESULT_OK; // All good.
 }
+
+int FileSystem::getIndexCount() {
+    int count = 0;
+
+    for (auto &entry : validIndices) {
+        if (entry.first != 255) // We don't see the fs descriptor as an index
+            count++;
+    }
+
+    return count;
+}
+
+bool FileSystem::hasIndex(int index) {
+    return validIndices[index] != nullptr;
+}

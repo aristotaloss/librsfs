@@ -24,6 +24,8 @@ public:
     FileSystem();
     ~FileSystem();
     RSFS_EXPORT FSResult loadDirectory(char *);
+    RSFS_EXPORT int getIndexCount();
+    RSFS_EXPORT bool hasIndex(int);
 
     static const FSResult RESULT_OK = 0;
     static const FSResult E_INVALID_DIRECTORY = 1;
