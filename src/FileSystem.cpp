@@ -9,7 +9,10 @@ FileSystem::FileSystem() {
 }
 
 FileSystem::~FileSystem() {
-    // Stub
+    // Free up the path instances created with 'new'
+    for (auto pair : validIndices) {
+        delete pair.second;
+    }
 }
 
 FSResult FileSystem::loadDirectory(char *directory) {
@@ -42,7 +45,6 @@ FSResult FileSystem::loadDirectory(char *directory) {
 
     // Set this instance's map to the allocated one
     this->validIndices = validIndices;
-
 
     return FileSystem::RESULT_OK; // All good.
 }
