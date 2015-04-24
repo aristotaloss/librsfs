@@ -35,7 +35,7 @@ FSResult FileSystem::LoadDirectory(char *directory) {
 
             // Check if the range is valid. If so, store it in our map.
             if (idxId >= 0 && idxId <= 255) {
-                valid_indices[idxId] = path(current); // Copy, otherwise it falls out of scope
+                valid_indices[idxId] = current;
             }
         }
     }
