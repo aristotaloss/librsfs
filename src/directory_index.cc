@@ -4,8 +4,9 @@
 
 #include "directory_index.h"
 
-DirectoryIndex::DirectoryIndex(FileSystem *file_system) {
+DirectoryIndex::DirectoryIndex(FileSystem *file_system, path index_file) {
     this->file_system = file_system;
+    this->index_file = index_file;
 }
 
 DirectoryIndex::~DirectoryIndex() {

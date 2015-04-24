@@ -6,6 +6,7 @@
 #define LIBRSFS_FILESYSTEM_H
 
 #include "librsfs.h"
+#include "directory_index.h"
 #include <stdio.h>
 #include <map>
 #include <boost/filesystem.hpp>
@@ -20,6 +21,8 @@ using boost::filesystem::directory_iterator;
 
 typedef int FSResult;
 
+// Predeclarations
+class DirectoryIndex;
 
 /**
  * Filesystem base class which will hold the main file reference and also contains a map of all the indices.
@@ -59,7 +62,8 @@ public:
     static const FSResult E_NO_MAINFILE = 2;
 
 private:
-    map<int, path> valid_indices;
+    path main_file;
+    map<int, DirectoryIndex> indices;
 
 };
 

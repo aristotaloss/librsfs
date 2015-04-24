@@ -5,11 +5,14 @@
 #ifndef LIBRSFS_DIRECTORYINDEX_H
 #define LIBRSFS_DIRECTORYINDEX_H
 
-
 #include "file_system.h"
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
 
 using boost::filesystem::path;
+
+// Predeclarations
+class FileSystem;
 
 class DirectoryIndex {
 
@@ -19,7 +22,7 @@ private:
     path main_file;
 
 public:
-    DirectoryIndex(FileSystem *);
+    DirectoryIndex(FileSystem *, path);
     ~DirectoryIndex();
 
 };
