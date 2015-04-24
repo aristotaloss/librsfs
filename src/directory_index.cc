@@ -34,5 +34,8 @@ FolderInfo DirectoryIndex::GetFolderInfo(int id) {
     int size_in_bytes = (size_buf[0] & 0xFF << 16) | (size_buf[1] & 0xFF << 8) | (size_buf[2] & 0xFF);
     int offset_in_blocks = (offset_buf[0] & 0xFF << 16) | (offset_buf[1] & 0xFF << 8) | (offset_buf[2] & 0xFF);
 
+    // Close the stream to release the file lock
+    stream.close();
+
     return FolderInfo(size_in_bytes, offset_in_blocks);
 }
