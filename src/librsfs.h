@@ -22,7 +22,7 @@
 #endif
 
 #ifndef LIBRSFS_DEPRECATED
-#  define LIBRSFS_DEPRECATED __declspec(deprecated)
+#  define LIBRSFS_DEPRECATED __attribute__ ((__deprecated__))
 #endif
 
 #ifndef LIBRSFS_DEPRECATED_EXPORT

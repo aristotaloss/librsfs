@@ -6,13 +6,16 @@
 #define LIBRSFS_DIRECTORYINDEX_H
 
 #include "file_system.h"
+#include "folder_info.h"
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 using boost::filesystem::path;
 
 // Predeclarations
 class FileSystem;
+class FolderInfo;
 
 class DirectoryIndex {
 
@@ -31,6 +34,8 @@ public:
      * which will make this method return 6 even though only 2 are valid.
      */
     int GetEntryCount();
+
+    FolderInfo GetFolderInfo(int id);
 
 };
 
