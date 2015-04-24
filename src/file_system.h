@@ -40,7 +40,7 @@ public:
      *
      * @param directory The directory the file store can be found in.
      */
-    RSFS_EXPORT void LoadDirectory(char *directory);
+    void LoadDirectory(char *directory);
 
     /**
      * Gets the number of (valid) indices in the file store. This method will yield 0 if the file system has not
@@ -48,16 +48,16 @@ public:
      *
      * @return The number of valid indices found in this file system, excluding the .idx255 file.
      */
-    RSFS_EXPORT int GetIndexCount();
+    int GetIndexCount();
 
     /**
      * Checks if this file system contains the specified index. If this file store was not loaded, this will always return
      * <code>false</code>. If an index is present, this will return <code>true</code> unless the passed index id is 255,
      * since the .idx255 file is not taken into consideration.
      */
-    RSFS_EXPORT bool HasIndex(int);
+    bool HasIndex(int);
 
-    RSFS_EXPORT DirectoryIndex GetIndex(int directory_id);
+    DirectoryIndex GetIndex(int directory_id);
 
     static const FSResult RESULT_OK = 0;
     static const FSResult E_INVALID_DIRECTORY = 1;
