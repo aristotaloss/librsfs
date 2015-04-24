@@ -19,8 +19,8 @@ void FileSystem::LoadDirectory(char *directory) {
     }
 
     // Discover main_file_cache.dat2 (the '/' operator glues two paths)
-    path mainfile = path(directory) / string("main_file_cache.dat2");
-    if (!exists(mainfile)) {
+    path mainfile = path(directory) / "main_file_cache.dat2";
+    if (!boost::filesystem::exists(mainfile)) {
         throw std::runtime_error("filestore does not contain main_file_cache.dat2");
     }
 
@@ -31,11 +31,11 @@ void FileSystem::LoadDirectory(char *directory) {
         string extension = current.extension().string();
 
         if (boost::starts_with(extension, ".idx") && extension.size() > 4) { // Is this an index descriptor?
-            int idxId = atoi(extension.substr(4).c_str()); // Substring from 4, parse as integer.
+            int index_id = atoi(extension.substr(4).c_str()); // Substring from 4, parse as integer.
 
             // Check if the range is valid. If so, store it in our map.
-            if (idxId >= 0 && idxId <= 255) {
-                valid_indices[idxId] = current;
+            if (index_id >= 0 && index_id <= 255) {
+                valid_indices[index_id] = current;
             }
         }
     }

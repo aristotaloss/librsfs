@@ -6,7 +6,7 @@ using namespace std;
 int main() {
     FileSystem filesystem;
     try {
-        filesystem.LoadDirectory(const_cast<char *>("C:\\Users\\Bart\\Documents\\osrs-server\\data\\filestore"));
+        filesystem.LoadDirectory(const_cast<char *>("C:\\cache_530"));
     } catch (const std::exception &exc) {
         printf("Error loading directory: %s\n", exc.what());
         return 0;
