@@ -19,7 +19,7 @@ int DirectoryIndex::GetEntryCount() {
 
 FolderInfo DirectoryIndex::GetFolderInfo(int id) {
     if (id > GetEntryCount())
-        return FolderInfo(0, 0);
+        return FolderInfo(0, 0, 0);
 
     // Create a new stream and position it at the start of the file
     boost::filesystem::ifstream stream(index_file);
@@ -37,5 +37,5 @@ FolderInfo DirectoryIndex::GetFolderInfo(int id) {
     // Close the stream to release the file lock
     stream.close();
 
-    return FolderInfo(size_in_bytes, offset_in_blocks);
+    return FolderInfo(id, size_in_bytes, offset_in_blocks);
 }

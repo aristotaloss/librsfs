@@ -5,7 +5,8 @@
 #include "folder_info.h"
 
 
-FolderInfo::FolderInfo(int size, int offset) {
+FolderInfo::FolderInfo(int id, int size, int offset) {
+    this->id = id;
     this->size = size;
     this->offset = offset;
 }
@@ -24,4 +25,8 @@ uint64_t FolderInfo::GetOffset() {
 
 bool FolderInfo::Exists() {
     return size > 0;
+}
+
+int FolderInfo::GetId() {
+    return id;
 }
