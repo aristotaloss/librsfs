@@ -25,6 +25,13 @@ public:
     DirectoryIndex(FileSystem *, path);
     ~DirectoryIndex();
 
+    /**
+     * Gets the (expected) number of entries in this directory. This does not correspond to the actual precise
+     * number of non-empty data entries as a directory may contain a folder with ID 4 and one with ID 6 for example,
+     * which will make this method return 6 even though only 2 are valid.
+     */
+    int GetEntryCount();
+
 };
 
 

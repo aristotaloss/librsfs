@@ -57,6 +57,8 @@ public:
      */
     RSFS_EXPORT bool HasIndex(int);
 
+    RSFS_EXPORT DirectoryIndex GetIndex(int directory_id);
+
     static const FSResult RESULT_OK = 0;
     static const FSResult E_INVALID_DIRECTORY = 1;
     static const FSResult E_NO_MAINFILE = 2;

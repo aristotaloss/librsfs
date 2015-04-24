@@ -14,5 +14,6 @@ int main() {
 
     printf("Number of indices: %d\n", filesystem.GetIndexCount());
     printf("Has index 15: %d, has 16: %d\n", filesystem.HasIndex(15), filesystem.HasIndex(16));
+    printf("Number of files in model directory: %d\n", filesystem.GetIndex(7).GetEntryCount());
     return 0;
 }

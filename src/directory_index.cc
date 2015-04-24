@@ -12,3 +12,7 @@ DirectoryIndex::DirectoryIndex(FileSystem *file_system, path index_file) {
 DirectoryIndex::~DirectoryIndex() {
 
 }
+
+int DirectoryIndex::GetEntryCount() {
+    return (int) (boost::filesystem::file_size(index_file) / 6);
+}

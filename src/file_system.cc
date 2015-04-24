@@ -60,3 +60,7 @@ int FileSystem::GetIndexCount() {
 bool FileSystem::HasIndex(int index) {
     return indices.count(index) != 0;
 }
+
+DirectoryIndex FileSystem::GetIndex(int directory_id) {
+    return indices.at(directory_id);
+}
