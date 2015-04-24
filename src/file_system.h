@@ -6,14 +6,18 @@
 #define LIBRSFS_FILESYSTEM_H
 
 #include "librsfs.h"
+#include "folder_info.h"
 #include "directory_index.h"
 #include <stdio.h>
 #include <map>
+#include <vector>
 #include <boost/filesystem.hpp>
 #include <boost/range.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 
 using std::map;
+using std::vector;
 using std::string;
 using boost::filesystem::path;
 using boost::filesystem::directory_entry;
@@ -58,6 +62,7 @@ public:
     bool HasIndex(int);
 
     DirectoryIndex GetIndex(int directory_id);
+    int Read(FolderInfo info, vector<char> &dest);
 
     static const FSResult RESULT_OK = 0;
     static const FSResult E_INVALID_DIRECTORY = 1;

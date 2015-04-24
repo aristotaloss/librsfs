@@ -64,3 +64,61 @@ bool FileSystem::HasIndex(int index) {
 DirectoryIndex FileSystem::GetIndex(int directory_id) {
     return indices.at(directory_id);
 }
+
+int FileSystem::Read(FolderInfo info, vector<char> &dest) {
+    // Make sure this operation isn't going to fail miserably
+    if (!info.Exists() || info.GetSize() > dest.capacity())
+        return 0;
+
+    boost::filesystem::ifstream data_stream(main_file, std::ios_base::in | std::ios_base::binary);
+    data_stream.seekg((int) info.GetOffset(), data_stream.beg);
+
+    // The big format was introduced around revision 667 because the IDs began to exceed 65535.
+    bool big_format = info.GetId() > 0xFFFF;
+    int header_size = big_format ? 10 : 8;
+    int data_size = big_format ? 510 : 512;
+    int remaining = info.GetSize();
+
+    char scratch_buffer[520];
+    int current_index = 0;
+    int current_id = info.GetId();
+    int current_sequence = -1;
+
+    while (remaining > 0) {
+        data_stream.read(scratch_buffer, 520); // Grab some data to use
+
+        uint32_t folder_id;
+        int sequence_id;
+        int next_offset;
+        int next_index;
+
+        if (big_format) {
+            folder_id = (uint32_t) ((scratch_buffer[0] & 0xFF << 24) | (scratch_buffer[1] & 0xFF << 16)
+                                   | (scratch_buffer[2] & 0xFF << 8) | (scratch_buffer[3] & 0xFF));
+            sequence_id = ((scratch_buffer[4] & 0xFF) << 8) | (scratch_buffer[5] & 0xFF);
+            next_offset = (((scratch_buffer[6] & 0xFF) << 16) | ((scratch_buffer[7] & 0xFF) << 8) | ((scratch_buffer[8]) & 0xFF));
+            next_index = scratch_buffer[9] & 0xFF;
+        } else {
+            folder_id = (uint32_t) (((scratch_buffer[0] & 0xFF) << 8) | ((scratch_buffer[1]) & 0xFF));
+            sequence_id = ((scratch_buffer[2] & 0xFF) << 8) | (scratch_buffer[3] & 0xFF);
+            next_offset = (((scratch_buffer[4] & 0xFF) << 16) | ((scratch_buffer[5] & 0xFF) << 8) | ((scratch_buffer[6]) & 0xFF));
+            next_index = scratch_buffer[7] & 0xFF;
+        }
+
+        if (folder_id != current_id || sequence_id != current_sequence + 1) {
+            throw std::runtime_error("malformed folder (sequence does not complete)");
+        }
+
+        // Fill dest buffer with remaining data
+        int num_left = remaining > data_size ? data_size : remaining;
+        dest.insert(dest.end(), &scratch_buffer[header_size], &scratch_buffer[num_left + header_size]);
+
+        // Position us to the next block
+        data_stream.seekg(next_offset * 520L, data_stream.beg);
+
+        current_sequence = sequence_id;
+        remaining -= big_format ? 510 : 512;
+    }
+
+    return dest.size();
+}

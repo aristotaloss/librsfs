@@ -37,6 +37,8 @@ public:
 
     FolderInfo GetFolderInfo(int id);
 
+    path GetFile();
+
 };
 
 
