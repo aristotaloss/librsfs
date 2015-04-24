@@ -58,5 +58,5 @@ int FileSystem::GetIndexCount() {
 }
 
 bool FileSystem::HasIndex(int index) {
-    return valid_indices[index] != nullptr;
+    return valid_indices.count(index) != 0;
 }
