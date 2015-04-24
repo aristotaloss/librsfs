@@ -12,16 +12,16 @@ FileSystem::~FileSystem() {
     // Stub
 }
 
-FSResult FileSystem::LoadDirectory(char *directory) {
+void FileSystem::LoadDirectory(char *directory) {
     // Does this directory exist... or is it even a directory?
     if (!boost::filesystem::exists(directory) || !boost::filesystem::is_directory(directory)) {
-        return FileSystem::E_INVALID_DIRECTORY;
+        throw std::runtime_error("directory is invalid or does not exist");
     }
 
     // Discover main_file_cache.dat2 (the '/' operator glues two paths)
     path mainfile = path(directory) / string("main_file_cache.dat2");
     if (!exists(mainfile)) {
-        return E_NO_MAINFILE;
+        throw std::runtime_error("filestore does not contain main_file_cache.dat2");
     }
 
     // Load all the *.idx files
@@ -42,8 +42,6 @@ FSResult FileSystem::LoadDirectory(char *directory) {
 
     // Set this instance's map to the allocated one
     this->valid_indices = valid_indices;
-
-    return FileSystem::RESULT_OK; // All good.
 }
 
 int FileSystem::GetIndexCount() {

@@ -35,11 +35,9 @@ public:
      * Load a file system from the specified path. A valid file system requires at least a main_file_cache.dat2
      * file and anywhere from one to 255 .idx<num> files, .idx255 being mandatory.
      *
-     * @return FileSystem::E_INVALID_DIRECTORY if the directory was non-existant, a file, or unreadable.
-     * @return FileSystem::E_NO_MAINFILE if the directory contained no main_file_cache.dat2 entry.
-     * @return FileSystem::RESULT_OK if the file system was loaded successfully.
+     * @param directory The directory the file store can be found in.
      */
-    RSFS_EXPORT FSResult LoadDirectory(char *);
+    RSFS_EXPORT void LoadDirectory(char *directory);
 
     /**
      * Gets the number of (valid) indices in the file store. This method will yield 0 if the file system has not
