@@ -8,6 +8,9 @@
 #include <boost/lexical_cast.hpp>
 #include <vector>
 #include <zlib.h>
+#include <bzlib.h>
+
+const static char *BZIP_HEADER = "BZh1";
 
 enum CompressionType {
 	NONE,

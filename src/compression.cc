@@ -39,6 +39,28 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 		delete strm;
 
 		return size;
+	} else if (compression_type == CompressionType::BZIP2) {
+		// First of all, initialize the stream with just the missing header bytes
+		bz_stream *strm = new bz_stream();
+		strm->avail_in = 4;
+		strm->next_in = const_cast<char*>(BZIP_HEADER);
+		strm->avail_out = destination.capacity();
+		strm->next_out = destination.data();
+
+		// Let BZ2 decode that header for us..
+		int init_error = BZ2_bzDecompressInit(strm, 0, 0);
+		int bzipresult = BZ2_bzDecompress(strm);
+
+		// .. And now feed the real data.
+		strm->avail_in = original.size() - 9;
+		strm->next_in = original.data() + 9;
+		bzipresult = BZ2_bzDecompress(strm);
+
+		// Free the stream and return the number of read bytes
+		int read = strm->total_out_lo32;
+		delete strm;
+
+		return read;
 	} else if (compression_type == CompressionType::NONE) { // If no compression just copy the bytes from O to D
 		memcpy_s(destination.data(), destination.capacity(), original.data() + 9, original.size() - 9);
 		return original.size() - 9;
