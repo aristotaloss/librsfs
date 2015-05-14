@@ -1,4 +1,3 @@
-
 #include "compression.h"
 
 CompressionType Compression::GetCompressionType(char first_byte) {

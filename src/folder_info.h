@@ -10,19 +10,19 @@
 class FolderInfo {
 
 private:
-    int id;
-    int size;
-    int offset;
+	int id;
+	int size;
+	int offset;
 
 public:
-    FolderInfo(int id, int size, int offset);
-    ~FolderInfo();
-    int GetSize();
-    int GetId();
-    uint64_t GetOffset();
-    bool Exists();
-
+	FolderInfo(int id, int size, int offset);
+	~FolderInfo();
+	int GetSize();
+	int GetId();
+	uint64_t GetOffset();
+	bool Exists();
 };
 
 
 #endif //LIBRSFS_FOLDER_H
+
