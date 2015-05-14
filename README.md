@@ -68,3 +68,12 @@ Some entries are compressed. Actually, most of them are. They are either compres
 vector<char> decompressed;
 int num = Compression::Decompress(entry_data, decompressed);
 ```
+
+## Getting compression information
+
+If you're simply curious on the compression type or the inflated/deflated sizes, you can do that with:
+```c++
+CompressionInfo compression_info(entry_data);
+auto compression_type = compression_info.GetCompressionType();
+auto decompressed_size = compression_info.GetDecompressedSize();
+```
