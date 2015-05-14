@@ -16,7 +16,7 @@ find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
 
 find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
-include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${BZIP_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${BZIP2_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
 
 # C++ flags
