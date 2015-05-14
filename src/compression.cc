@@ -39,6 +39,9 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 		delete strm;
 
 		return size;
+	} else if (compression_type == CompressionType::NONE) { // If no compression just copy the bytes from O to D
+		memcpy_s(destination.data(), destination.capacity(), original.data() + 9, original.size() - 9);
+		return original.size() - 9;
 	}
 
 	return 0;
