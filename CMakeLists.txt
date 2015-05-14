@@ -12,10 +12,11 @@ if((NOT DEFINED BOOST_ROOT) OR (NOT IS_DIRECTORY BOOST_ROOT))
 endif()
 
 # Please, dear CMake gods, find ZLib
-find_package( ZLIB REQUIRED )
+find_package(ZLIB REQUIRED)
+find_package(BZip2 REQUIRED)
 
 find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
-include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${BZIP_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIR})
 
 # C++ flags
@@ -39,5 +40,5 @@ set_target_properties(librsfs PROPERTIES
                       COMPILE_FLAGS -DRSFS_BUILT_AS_STATIC)
 
 # Define dependencies of our build
-target_link_libraries(librsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
-target_link_libraries(rsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
+target_link_libraries(librsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES})
+target_link_libraries(rsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES})
