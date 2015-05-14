@@ -24,16 +24,16 @@ void FileSystem::LoadDirectory(char *directory) {
     }
 
     // Discover main_file_cache.dat2 (the '/' operator glues two paths)
-    path main_file = path(directory) / "main_file_cache.dat2";
+	auto main_file = path(directory) / "main_file_cache.dat2";
     if (!boost::filesystem::exists(main_file)) {
         throw std::runtime_error("filestore does not contain main_file_cache.dat2");
     }
     this->main_file = main_file;
 
     // Load all the *.idx files
-    for (directory_entry e : boost::make_iterator_range(directory_iterator(directory))) { // Loop
-        path current = e.path();
-        string extension = current.extension().string();
+    for (auto e : boost::make_iterator_range(directory_iterator(directory))) { // Loop
+	    auto current = e.path();
+	    auto extension = current.extension().string();
 
         if (boost::starts_with(extension, ".idx") && extension.size() > 4) { // Is this an index descriptor?
             int index_id = atoi(extension.substr(4).c_str()); // Substring from 4, parse as integer.
@@ -47,7 +47,7 @@ void FileSystem::LoadDirectory(char *directory) {
 }
 
 int FileSystem::GetIndexCount() {
-    int count = 0;
+	auto count = 0;
 
     for (auto &entry : indices) {
         if (entry.first != 255) // We don't see the fs descriptor as an index
@@ -67,58 +67,59 @@ DirectoryIndex FileSystem::GetIndex(int directory_id) {
 
 int FileSystem::Read(FolderInfo info, vector<char> &dest) {
     // Make sure this operation isn't going to fail miserably
-    if (!info.Exists() || info.GetSize() > dest.capacity())
+    if (!info.Exists())
         return 0;
 
-    boost::filesystem::ifstream data_stream(main_file, std::ios_base::in | std::ios_base::binary);
-    data_stream.seekg((int) info.GetOffset(), data_stream.beg);
+    boost::filesystem::ifstream data_stream(main_file, std::ios_base::binary);
+    data_stream.seekg(static_cast<int>(info.GetOffset()), data_stream.beg);
 
     // The big format was introduced around revision 667 because the IDs began to exceed 65535.
     bool big_format = info.GetId() > 0xFFFF;
     int header_size = big_format ? 10 : 8;
-    int data_size = big_format ? 510 : 512;
+	int data_size = BLOCK_SIZE - header_size;
     int remaining = info.GetSize();
 
-    char scratch_buffer[520];
+	char scratch_buffer[BLOCK_SIZE];
     int current_index = 0;
     int current_id = info.GetId();
-    int current_sequence = -1;
+	int current_part = -1;
 
     while (remaining > 0) {
-        data_stream.read(scratch_buffer, 520); // Grab some data to use
+		data_stream.read(scratch_buffer, BLOCK_SIZE); // Grab some data to use
 
         uint32_t folder_id;
-        int sequence_id;
+		int part_id;
         int next_offset;
         int next_index;
 
         if (big_format) {
-            folder_id = (uint32_t) ((scratch_buffer[0] & 0xFF << 24) | (scratch_buffer[1] & 0xFF << 16)
-                                   | (scratch_buffer[2] & 0xFF << 8) | (scratch_buffer[3] & 0xFF));
-            sequence_id = ((scratch_buffer[4] & 0xFF) << 8) | (scratch_buffer[5] & 0xFF);
+            folder_id = static_cast<uint32_t>((scratch_buffer[0] & 0xFF << 24) | (scratch_buffer[1] & 0xFF << 16) | (scratch_buffer[2] & 0xFF << 8) | (scratch_buffer[3] & 0xFF));
+			part_id = ((scratch_buffer[4] & 0xFF) << 8) | (scratch_buffer[5] & 0xFF);
             next_offset = (((scratch_buffer[6] & 0xFF) << 16) | ((scratch_buffer[7] & 0xFF) << 8) | ((scratch_buffer[8]) & 0xFF));
             next_index = scratch_buffer[9] & 0xFF;
         } else {
-            folder_id = (uint32_t) (((scratch_buffer[0] & 0xFF) << 8) | ((scratch_buffer[1]) & 0xFF));
-            sequence_id = ((scratch_buffer[2] & 0xFF) << 8) | (scratch_buffer[3] & 0xFF);
+            folder_id = static_cast<uint32_t>(((scratch_buffer[0] & 0xFF) << 8) | ((scratch_buffer[1]) & 0xFF));
+			part_id = ((scratch_buffer[2] & 0xFF) << 8) | (scratch_buffer[3] & 0xFF);
             next_offset = (((scratch_buffer[4] & 0xFF) << 16) | ((scratch_buffer[5] & 0xFF) << 8) | ((scratch_buffer[6]) & 0xFF));
             next_index = scratch_buffer[7] & 0xFF;
         }
 
-        if (folder_id != current_id || sequence_id != current_sequence + 1) {
+		// Check if everything is still OK
+        if (folder_id != current_id || part_id != current_part + 1) {
             throw std::runtime_error("malformed folder (sequence does not complete)");
         }
 
         // Fill dest buffer with remaining data
-        int num_left = remaining > data_size ? data_size : remaining;
+	    auto num_left = remaining > data_size ? data_size : remaining;
         dest.insert(dest.end(), &scratch_buffer[header_size], &scratch_buffer[num_left + header_size]);
 
         // Position us to the next block
-        data_stream.seekg(next_offset * 520L, data_stream.beg);
+		data_stream.seekg(static_cast<long>(next_offset) * BLOCK_SIZE, data_stream.beg);
 
-        current_sequence = sequence_id;
-        remaining -= big_format ? 510 : 512;
+		current_part = part_id;
+        remaining -= data_size;
     }
 
+	data_stream.close();
     return dest.size();
 }

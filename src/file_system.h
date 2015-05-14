@@ -9,6 +9,7 @@
 #include "folder_info.h"
 #include "directory_index.h"
 #include <stdio.h>
+#include <fstream>
 #include <map>
 #include <vector>
 #include <boost/filesystem.hpp>
@@ -24,6 +25,8 @@ using boost::filesystem::directory_entry;
 using boost::filesystem::directory_iterator;
 
 typedef int FSResult;
+
+#define BLOCK_SIZE 520
 
 // Predeclarations
 class DirectoryIndex;

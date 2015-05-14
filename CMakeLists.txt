@@ -11,18 +11,21 @@ if((NOT DEFINED BOOST_ROOT) OR (NOT IS_DIRECTORY BOOST_ROOT))
     message(WARNING "-D BOOST_ROOT=boostpathhere.")
 endif()
 
-find_package(Boost COMPONENTS system filesystem REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
+# Please, dear CMake gods, find ZLib
+find_package( ZLIB REQUIRED )
+
+find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
+include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
 
 # C++ flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libgcc -static-libstdc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -std=c++11 -static-libgcc -static-libstdc++")
 
 # Our list of source files to include in this build
-set(SOURCE_FILES src/main.cc src/file_system.cc src/file_system.h src/librsfs.h)
+set(SOURCE_FILES src/main.cc src/file_system.cc src/file_system.h src/librsfs.h src/compression.cc)
 
-add_executable(librsfs ${SOURCE_FILES} src/directory_index.cc src/directory_index.h src/folder_info.cc src/folder_info.h src/compression.h) # Define executable for command-line usage
-add_library(rsfs SHARED ${SOURCE_FILES} src/directory_index.cc src/directory_index.h src/folder_info.cc src/folder_info.h src/compression.h) # Define the shared library (.dll or .dylib or .a)
+add_executable(librsfs ${SOURCE_FILES} src/directory_index.cc src/directory_index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define executable for command-line usage
+add_library(rsfs SHARED ${SOURCE_FILES} src/directory_index.cc src/directory_index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define the shared library (.dll or .dylib or .a)
 
 # Define how the exported library will come out
 GENERATE_EXPORT_HEADER(rsfs
@@ -36,5 +39,5 @@ set_target_properties(librsfs PROPERTIES
                       COMPILE_FLAGS -DRSFS_BUILT_AS_STATIC)
 
 # Define dependencies of our build
-target_link_libraries(librsfs ${Boost_LIBRARIES})
-target_link_libraries(rsfs ${Boost_LIBRARIES})
+target_link_libraries(librsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
+target_link_libraries(rsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})

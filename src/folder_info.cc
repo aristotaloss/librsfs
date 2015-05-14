@@ -20,7 +20,7 @@ int FolderInfo::GetSize() {
 }
 
 uint64_t FolderInfo::GetOffset() {
-    return ((uint64_t) offset) * 520L;
+    return static_cast<uint64_t>(offset) * 520L;
 }
 
 bool FolderInfo::Exists() {
