@@ -15,6 +15,43 @@ ranges from `.idx0` (which would be a simple `directory` with ID 0) to `.idx255`
 index 255 contains the root reference table). These directories contain `folder` entries. These folder entries can 
 either be plain (compressed) data themselves, or contain individual files. 
 
+# Building
+
+## On Windows
+
+### librsfs
+Since it's pretty much impossible to let CMake find everything needed immediately on Windows you'll most likely have to do some -D'ing yourself when invoking the CMake command.
+
+First of all, make a new directory. Out-of-source builds are so much nicer (and you don't get all the Git clobbing!).
+
+```
+mkdir librsfs-build
+cd librsfs-build
+```
+
+Now invoke the CMake command with the defines to ensure everything's easy to find:
+
+```
+cmake ../librsfs -DZLIB_ROOT="C:/zlib-x.y.z" -DBZIP_INCLUDE_DIR="C:/bzip2-x.y.z" -DBZIP2_LIBRARIES="C:/bzip-x.y.z/Debug" -G "Visual Studio 12 Win64"
+```
+
+The above command builds for an x64 release. If you are looking for the 32-bit build, leave out Win64 when passing the generator to CMake. Note that this requires you to have built both ZLib and BZip2 yourself in advance, otherwise building will fail because there are no libraries.
+
+This will create a solution file, a few project files and the other good stuff for you ready to open & build.
+
+### zlib
+
+Building ZLib x64 on Windows isn't straightforward either, and there's a project which contains a Visual Studio-ready version of zlib which is easier to build and use and needs no modifying. It can be found [here](https://code.google.com/p/zlib-win64/). To build it as 32-bit library, look a bit around on Google and you'll definitely find a way to use the supplied .msc makefile. Shouldn't be too much of a pain.
+
+### bzip2
+
+Luckily, bzip2 supplies an ages-old VC6 project file which still works and gets converted in VS perfectly fine. The file is called `libbz2.dsp` and can be easily built. If that's not working fot you, there's also a .msc makefile available in the directory.
+
+## On any other programmer-friendly operating system
+
+It's less hassle on a unix system (by far) as CMake can properly detect everything you need, and what's missing can be installed through your package manager. Even it that fails, it's probably a two second job to build the libraries from source. CMake will simply generate a makefile which is ready to be invoked.
+
+
 # Usage
 
 ## Loading from a folder
