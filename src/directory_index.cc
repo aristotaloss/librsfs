@@ -18,12 +18,16 @@ int DirectoryIndex::GetEntryCount() {
 }
 
 FolderInfo DirectoryIndex::GetFolderInfo(int id) {
-	if (id > GetEntryCount())
+	if (id >= GetEntryCount())
 		return FolderInfo(0, 0, 0);
 
 	// Create a new stream and position it at the start of the file
 	boost::filesystem::ifstream stream(index_file, std::ios_base::in | std::ios_base::binary);
 	stream.seekg(id * 6, stream.beg);
+
+	// Were we able to seek there?
+	if (id * 6 != stream.tellg().seekpos())
+		return FolderInfo(0, 0, 0);
 
 	// Read the six bytes of info from the stream
 	char size_buf[3], offset_buf[3];
@@ -42,4 +46,20 @@ FolderInfo DirectoryIndex::GetFolderInfo(int id) {
 
 path DirectoryIndex::GetFile() {
 	return index_file;
+}
+
+int DirectoryIndex::GetRaw(int id, vector<char> &dest) {
+	FolderInfo info = GetFolderInfo(id);
+	if (!info.Exists())
+		return 0;
+
+	return file_system->Read(info, dest);
+}
+
+int DirectoryIndex::GetDecompressed(int id, vector<char> &dest) {
+	FolderInfo info = GetFolderInfo(id);
+	if (!info.Exists())
+		return 0;
+
+	return file_system->ReadAndDecompress(info, dest);
 }

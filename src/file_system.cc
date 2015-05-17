@@ -65,6 +65,18 @@ DirectoryIndex FileSystem::GetIndex(int directory_id) {
 	return indices.at(directory_id);
 }
 
+int FileSystem::ReadAndDecompress(FolderInfo info, vector<char> &dest) {
+	vector<char> raw;
+	int read = Read(info, raw);
+
+	// Were we unable to get some data?
+	if (read == 0)
+		return 0;
+
+	// All is good, decompress.
+	return Compression::Decompress(raw, dest);
+}
+
 int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 	// Make sure this operation isn't going to fail miserably
 	if (!info.Exists())
@@ -72,6 +84,10 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 
 	boost::filesystem::ifstream data_stream(main_file, std::ios_base::binary);
 	data_stream.seekg(static_cast<int>(info.GetOffset()), data_stream.beg);
+
+	// Were we able to seek there?
+	if (info.GetOffset() != data_stream.tellg().seekpos())
+		return 0;
 
 	// The big format was introduced around revision 667 because the IDs began to exceed 65535.
 	bool big_format = info.GetId() > 0xFFFF;

@@ -16,6 +16,7 @@
 #include <boost/range.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+#include "compression.h"
 
 using std::map;
 using std::vector;
@@ -65,6 +66,7 @@ public:
 
 	DirectoryIndex GetIndex(int directory_id);
 	int Read(FolderInfo info, vector<char> &dest);
+	int ReadAndDecompress(FolderInfo info, vector<char> &dest);
 
 private:
 	path main_file;

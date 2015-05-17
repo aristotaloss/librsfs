@@ -10,8 +10,10 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <vector>
 
 using boost::filesystem::path;
+using namespace std;
 
 // Predeclarations
 class FileSystem;
@@ -37,6 +39,10 @@ public:
 	FolderInfo GetFolderInfo(int id);
 
 	path GetFile();
+
+	int GetRaw(int id, vector<char> &dest);
+
+	int GetDecompressed(int id, vector<char> &dest);
 };
 
 
