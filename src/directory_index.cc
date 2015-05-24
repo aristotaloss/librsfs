@@ -26,7 +26,7 @@ FolderInfo DirectoryIndex::GetFolderInfo(int id) {
 	stream.seekg(id * 6, stream.beg);
 
 	// Were we able to seek there?
-	if (id * 6 != stream.tellg().seekpos())
+	if (id * 6 != stream.tellg())
 		return FolderInfo(0, 0, 0);
 
 	// Read the six bytes of info from the stream

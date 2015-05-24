@@ -86,7 +86,7 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 	data_stream.seekg(static_cast<int>(info.GetOffset()), data_stream.beg);
 
 	// Were we able to seek there?
-	if (info.GetOffset() != data_stream.tellg().seekpos())
+	if (info.GetOffset() != data_stream.tellg())
 		return 0;
 
 	// The big format was introduced around revision 667 because the IDs began to exceed 65535.
