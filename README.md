@@ -5,14 +5,14 @@ C++ library for the RuneScape file store
 The RuneScape file system consists of a three-level hierarchy, which can be illustrated as follows:
 
  - Filesystem
-   - Directory
+   - Index
      - Folder
          - File
 
 In this hierarchy, the `filesystem` is simply put the directory containing the `main_file_cache.dat2` file 
 (which contains the actual file data). The file system also has files in that directory ending with `.idx*` which 
-ranges from `.idx0` (which would be a simple `directory` with ID 0) to `.idx255` (which is a special one; directory 
-index 255 contains the root reference table). These directories contain `folder` entries. These folder entries can 
+ranges from `.idx0` (which would be a simple `index` with ID 0) to `.idx255` (which is a special one; index 
+index 255 contains the root reference table). These indices contain `folder` entries. These folder entries can 
 either be plain (compressed) data themselves, or contain individual files. 
 
 # Building
@@ -63,19 +63,19 @@ It's less hassle on a unix system (by far) as CMake can properly detect everythi
 ```c++
 try {
 	FileSystem filesystem;
-	filesystem.LoadDirectory(your_directory);
+	filesystem.LoadIndex(your_directory);
 } catch (const std::exception &exc) {
 	printf("Error loading directory: %s\n", exc.what());
 }
 ```
 
-## Checking the number of directories
+## Checking the number of indices
 
 ```c++
 auto count = filesystem.GetIndexCount();
 ```
 
-## Checking the (assumed) number of entries in a directory
+## Checking the (assumed) number of entries in an index
 
 This does not necessarily check the actual number of 'valid' entries, but guesses the number based on the highest entry ID. Since the entries could look like `1, 4, 77, 78, 79` this does not accurately match the actual number of entries containing data. The method would, using above data, return 79, while it actually only has 5 entries.
 ```c++
