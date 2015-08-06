@@ -19,15 +19,15 @@ using namespace std;
 class FileSystem;
 class FolderInfo;
 
-class DirectoryIndex {
+class Index {
 private:
 	FileSystem* file_system;
 	path index_file;
 	path main_file;
 
 public:
-	DirectoryIndex(FileSystem*, path);
-	~DirectoryIndex();
+	Index(FileSystem*, path);
+	~Index();
 
 	/**
      * Gets the (expected) number of entries in this directory. This does not correspond to the actual precise

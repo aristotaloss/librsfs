@@ -40,7 +40,7 @@ void FileSystem::LoadDirectory(char *directory) {
 
 			// Check if the range is valid. If so, store it in our map.
 			if (index_id >= 0 && index_id <= 255) {
-				indices.insert(std::make_pair(index_id, DirectoryIndex(this, current)));
+				indices.insert(std::make_pair(index_id, Index(this, current)));
 			}
 		}
 	}
@@ -61,7 +61,7 @@ bool FileSystem::HasIndex(int index) {
 	return indices.count(index) != 0;
 }
 
-DirectoryIndex FileSystem::GetIndex(int directory_id) {
+Index FileSystem::GetIndex(int directory_id) {
 	return indices.at(directory_id);
 }
 

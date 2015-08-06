@@ -7,7 +7,7 @@
 
 #include "librsfs.h"
 #include "folder_info.h"
-#include "directory_index.h"
+#include "index.h"
 #include <stdio.h>
 #include <fstream>
 #include <map>
@@ -30,7 +30,7 @@ typedef int FSResult;
 #define BLOCK_SIZE 520
 
 // Predeclarations
-class DirectoryIndex;
+class Index;
 
 /**
  * Filesystem base class which will hold the main file reference and also contains a map of all the indices.
@@ -64,13 +64,13 @@ public:
      */
 	bool HasIndex(int);
 
-	DirectoryIndex GetIndex(int directory_id);
+	Index GetIndex(int directory_id);
 	int Read(FolderInfo info, vector<char> &dest);
 	int ReadAndDecompress(FolderInfo info, vector<char> &dest);
 
 private:
 	path main_file;
-	map<int, DirectoryIndex> indices;
+	map<int, Index> indices;
 };
 
 

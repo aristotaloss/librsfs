@@ -25,8 +25,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -std=c++11 -static-libgcc -static-li
 # Our list of source files to include in this build
 set(SOURCE_FILES src/main.cc src/file_system.cc src/file_system.h src/librsfs.h src/compression.cc)
 
-add_executable(librsfs ${SOURCE_FILES} src/directory_index.cc src/directory_index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define executable for command-line usage
-add_library(rsfs SHARED ${SOURCE_FILES} src/directory_index.cc src/directory_index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define the shared library (.dll or .dylib or .a)
+add_executable(librsfs ${SOURCE_FILES} src/index.cc src/index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define executable for command-line usage
+add_library(rsfs SHARED ${SOURCE_FILES} src/index.cc src/index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define the shared library (.dll or .dylib or .a)
 
 # Define how the exported library will come out
 GENERATE_EXPORT_HEADER(rsfs

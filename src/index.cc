@@ -2,22 +2,22 @@
 // Created by Bart on 4/24/2015.
 //
 
-#include "directory_index.h"
+#include "index.h"
 
-DirectoryIndex::DirectoryIndex(FileSystem *file_system, path index_file) {
+Index::Index(FileSystem *file_system, path index_file) {
 	this->file_system = file_system;
 	this->index_file = index_file;
 }
 
-DirectoryIndex::~DirectoryIndex() {
+Index::~Index() {
 
 }
 
-int DirectoryIndex::GetEntryCount() {
+int Index::GetEntryCount() {
 	return static_cast<int>(boost::filesystem::file_size(index_file) / 6);
 }
 
-FolderInfo DirectoryIndex::GetFolderInfo(int id) {
+FolderInfo Index::GetFolderInfo(int id) {
 	if (id >= GetEntryCount())
 		return FolderInfo(0, 0, 0);
 
@@ -44,11 +44,11 @@ FolderInfo DirectoryIndex::GetFolderInfo(int id) {
 	return FolderInfo(id, size_in_bytes, offset_in_blocks);
 }
 
-path DirectoryIndex::GetFile() {
+path Index::GetFile() {
 	return index_file;
 }
 
-int DirectoryIndex::GetRaw(int id, vector<char> &dest) {
+int Index::GetRaw(int id, vector<char> &dest) {
 	FolderInfo info = GetFolderInfo(id);
 	if (!info.Exists())
 		return 0;
@@ -56,7 +56,7 @@ int DirectoryIndex::GetRaw(int id, vector<char> &dest) {
 	return file_system->Read(info, dest);
 }
 
-int DirectoryIndex::GetDecompressed(int id, vector<char> &dest) {
+int Index::GetDecompressed(int id, vector<char> &dest) {
 	FolderInfo info = GetFolderInfo(id);
 	if (!info.Exists())
 		return 0;
