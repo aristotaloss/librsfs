@@ -1,2 +1,0 @@
-/home/server/librsfs/build/CMakeFiles/rsfs.dir
-/home/server/librsfs/build/CMakeFiles/librsfs.dir

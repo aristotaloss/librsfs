@@ -1,1 +1,0 @@
-/usr/bin/c++    -O2 -std=c++11 -static-libgcc -static-libstdc++   CMakeFiles/librsfs.dir/src/main.cc.o CMakeFiles/librsfs.dir/src/file_system.cc.o CMakeFiles/librsfs.dir/src/compression.cc.o CMakeFiles/librsfs.dir/src/index.cc.o CMakeFiles/librsfs.dir/src/folder_info.cc.o  -o ../librsfs -rdynamic -lboost_system -lboost_iostreams -lboost_filesystem -lz -lbz2 -llzma 
