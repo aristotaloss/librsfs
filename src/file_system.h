@@ -27,7 +27,7 @@ using boost::filesystem::directory_iterator;
 
 typedef int FSResult;
 
-#define BLOCK_SIZE 520
+#define BLOCK_SIZE 520ULL
 
 // Predeclarations
 class Index;

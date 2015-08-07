@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC  -O2 -std=c++11 -static-libgcc -static-libstdc++  -shared -Wl,-soname,librsfs.so -o librsfs.so CMakeFiles/rsfs.dir/src/main.cc.o CMakeFiles/rsfs.dir/src/file_system.cc.o CMakeFiles/rsfs.dir/src/compression.cc.o CMakeFiles/rsfs.dir/src/index.cc.o CMakeFiles/rsfs.dir/src/folder_info.cc.o -lboost_system -lboost_iostreams -lboost_filesystem -lz -lbz2 -llzma 

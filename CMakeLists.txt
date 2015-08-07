@@ -3,7 +3,7 @@ project(librsfs)
 include(GenerateExportHeader)
 
 # Boost configuration
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Warn when there is no BOOST_ROOT defined (which will result in the project not compiling).
 if((NOT DEFINED BOOST_ROOT) OR (NOT IS_DIRECTORY BOOST_ROOT))
@@ -14,9 +14,10 @@ endif()
 # Please, dear CMake gods, find ZLib
 find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
+find_package(LibLZMA REQUIRED)
 
 find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
-include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${BZIP2_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${BZIP2_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIR})
 
 # C++ flags
@@ -40,5 +41,5 @@ set_target_properties(librsfs PROPERTIES
                       COMPILE_FLAGS -DRSFS_BUILT_AS_STATIC)
 
 # Define dependencies of our build
-target_link_libraries(librsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES})
-target_link_libraries(rsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES})
+target_link_libraries(librsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${LIBLZMA_LIBRARIES})
+target_link_libraries(rsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES} ${LIBLZMA_LIBRARIES})

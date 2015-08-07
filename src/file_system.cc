@@ -83,7 +83,7 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 		return 0;
 
 	boost::filesystem::ifstream data_stream(main_file, std::ios_base::binary);
-	data_stream.seekg(static_cast<int>(info.GetOffset()), data_stream.beg);
+	data_stream.seekg(static_cast<uint64_t>(info.GetOffset()), data_stream.beg);
 
 	// Were we able to seek there?
 	if (info.GetOffset() != data_stream.tellg())
@@ -109,7 +109,7 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 		int next_index;
 
 		if (big_format) {
-			folder_id = static_cast<uint32_t>((scratch_buffer[0] & 0xFF << 24) | (scratch_buffer[1] & 0xFF << 16) | (scratch_buffer[2] & 0xFF << 8) | (scratch_buffer[3] & 0xFF));
+			folder_id = static_cast<uint32_t>(((scratch_buffer[0] & 0xFF) << 24) | ((scratch_buffer[1] & 0xFF) << 16) | ((scratch_buffer[2] & 0xFF) << 8) | (scratch_buffer[3] & 0xFF));
 			part_id = ((scratch_buffer[4] & 0xFF) << 8) | (scratch_buffer[5] & 0xFF);
 			next_offset = (((scratch_buffer[6] & 0xFF) << 16) | ((scratch_buffer[7] & 0xFF) << 8) | ((scratch_buffer[8]) & 0xFF));
 			next_index = scratch_buffer[9] & 0xFF;
@@ -122,6 +122,7 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 
 		// Check if everything is still OK
 		if (folder_id != current_id || part_id != current_part + 1) {
+			printf("malformed folder (sequence does not complete: folder %d != %d or part %d != %d)\n", folder_id, current_id, part_id, current_part+1);
 			throw std::runtime_error("malformed folder (sequence does not complete)");
 		}
 
@@ -130,10 +131,11 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 		dest.insert(dest.end(), &scratch_buffer[header_size], &scratch_buffer[num_left + header_size]);
 
 		// Position us to the next block
-		data_stream.seekg(static_cast<long>(next_offset) * BLOCK_SIZE, data_stream.beg);
+		data_stream.seekg(static_cast<uint64_t>(next_offset) * static_cast<uint64_t>(BLOCK_SIZE), data_stream.beg);
 
 		current_part = part_id;
 		remaining -= data_size;
+		printf("seek to %lld with %d remaining\n", static_cast<uint64_t>(next_offset) * static_cast<uint64_t>(BLOCK_SIZE), remaining);
 	}
 
 	data_stream.close();

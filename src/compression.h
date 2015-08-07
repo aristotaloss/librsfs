@@ -9,13 +9,15 @@
 #include <vector>
 #include <zlib.h>
 #include <bzlib.h>
+#include <lzma.h>
 
 const static char *BZIP_HEADER = "BZh1";
 
 enum CompressionType {
 	NONE,
 	BZIP2,
-	GZIP
+	GZIP,
+	LZMA
 };
 
 class Compression {

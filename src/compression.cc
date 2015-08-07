@@ -8,6 +8,8 @@ CompressionType Compression::GetCompressionType(char first_byte) {
 		return CompressionType::BZIP2;
 	case 2:
 		return CompressionType::GZIP;
+	case 3:
+		return CompressionType::LZMA;
 	default:
 		throw std::runtime_error(std::string("invalid compression type ") + boost::lexical_cast<std::string>(first_byte));
 	}
@@ -61,6 +63,17 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 		delete strm;
 
 		return read;
+	} else if (compression_type == CompressionType::LZMA) {
+		auto strm = new lzma_stream();
+		lzma_stream_decoder(strm, UINT64_MAX, LZMA_CONCATENATED);
+		strm->avail_in = original.size() - 9;
+		strm->next_in = reinterpret_cast<Byte*>(original.data() + 9);
+		strm->avail_out = destination.capacity();
+		strm->next_out = reinterpret_cast<Byte*>(destination.data());
+
+		lzma_ret ret = lzma_code(strm, LZMA_RUN);
+		ret = lzma_code(strm, LZMA_FINISH);
+		lzma_end(strm);
 	} else if (compression_type == CompressionType::NONE) { // If no compression just copy the bytes from O to D
 		memcpy(destination.data(), original.data() + 9, original.size() - 9);
 		return original.size() - 9;
