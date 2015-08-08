@@ -64,19 +64,32 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 
 		return read;
 	} else if (compression_type == CompressionType::LZMA) {
-		auto strm = new lzma_stream();
-		lzma_stream_decoder(strm, UINT64_MAX, LZMA_CONCATENATED);
-		strm->avail_in = original.size() - 9;
-		strm->next_in = reinterpret_cast<Byte*>(original.data() + 9);
-		strm->avail_out = destination.capacity();
-		strm->next_out = reinterpret_cast<Byte*>(destination.data());
+		std::vector<char> forged_input(original.size() - 9 + 8); // Properties, dict size and full size
+		forged_input.resize(original.size() - 9 + 8);
 
-		lzma_ret ret = lzma_code(strm, LZMA_RUN);
-		ret = lzma_code(strm, LZMA_FINISH);
+		memcpy(forged_input.data(), original.data() + 9, 5); // Copy properties and dict size
+		auto decompressed_size = compression_info.GetDecompressedSize();
+		forged_input[5] = (char) (decompressed_size);
+		forged_input[6] = (char) (decompressed_size >> 8);
+		forged_input[7] = (char) (decompressed_size >> 16);
+		forged_input[8] = (char) (decompressed_size >> 24);
+		memcpy(forged_input.data() + 13, original.data() + 9 + 5, original.size() - 9 - 5);
+
+		auto strm = new lzma_stream();
+		lzma_alone_decoder(strm, UINT64_MAX);
+		strm->avail_in = forged_input.size();
+		strm->next_in = (uint8_t *) forged_input.data();
+		strm->avail_out = destination.capacity();
+		strm->next_out = (uint8_t *) destination.data();
+
+		lzma_code(strm, LZMA_RUN);
+		lzma_code(strm, LZMA_FINISH);
+
 		lzma_end(strm);
+		return (int) strm->total_out;
 	} else if (compression_type == CompressionType::NONE) { // If no compression just copy the bytes from O to D
 		memcpy(destination.data(), original.data() + 9, original.size() - 9);
-		return original.size() - 9;
+		return (int) (original.size() - 9);
 	}
 
 	return 0;
