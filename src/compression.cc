@@ -1,18 +1,11 @@
 #include "compression.h"
 
 CompressionType Compression::GetCompressionType(char first_byte) {
-	switch (first_byte) {
-	case 0:
-		return CompressionType::NONE;
-	case 1:
-		return CompressionType::BZIP2;
-	case 2:
-		return CompressionType::GZIP;
-	case 3:
-		return CompressionType::LZMA;
-	default:
+	if (((unsigned char)first_byte) > 3) {
 		throw std::runtime_error(std::string("invalid compression type ") + boost::lexical_cast<std::string>(first_byte));
 	}
+
+	return (CompressionType) first_byte;
 }
 
 CompressionInfo::CompressionInfo(std::vector<char> &data) {
