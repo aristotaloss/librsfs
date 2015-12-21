@@ -14,10 +14,10 @@
 const static char *BZIP_HEADER = "BZh1";
 
 enum CompressionType {
-	NONE,
-	BZIP2,
-	GZIP,
-	LZMA
+	NONE = 0,
+	BZIP2 = 1,
+	GZIP = 2,
+	LZMA = 3
 };
 
 class Compression {
