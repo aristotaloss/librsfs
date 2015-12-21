@@ -10,8 +10,8 @@ CompressionType Compression::GetCompressionType(char first_byte) {
 
 CompressionInfo::CompressionInfo(std::vector<char> &data) {
 	compression_type = Compression::GetCompressionType(data[0]);
-	compressed_size = ((data[1] & 0xFF) << 24) | ((data[2] & 0xFF) << 16) | ((data[3] & 0xFF) << 8) | (data[4] & 0xFF);
-	decompressed_size = ((data[5] & 0xFF) << 24) | ((data[6] & 0xFF) << 16) | ((data[7] & 0xFF) << 8) | (data[8] & 0xFF);
+	compressed_size = (unsigned int) *(&data[1]);
+	decompressed_size = (unsigned int) *(&data[5]);
 }
 
 int Compression::Decompress(std::vector<char> &original, std::vector<char> &destination) {
