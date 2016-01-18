@@ -7,7 +7,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <vector>
-#include <zlib.h>
+#include "zlib/zlib.h"
 #include "bzip2/bzlib.h"
 #include <lzma.h>
 

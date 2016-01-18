@@ -13,11 +13,10 @@ if((NOT DEFINED BOOST_ROOT) OR (NOT IS_DIRECTORY BOOST_ROOT))
 endif()
 
 # Please, dear CMake gods, find ZLib
-find_package(ZLIB REQUIRED)
 find_package(LibLZMA REQUIRED)
 
 find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
-include_directories(${Boost_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIR})
 
 # C++ flags
@@ -25,9 +24,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libgcc -static-libstd
 
 # Our list of source files to include in this build
 set(SOURCE_FILES src/main.cc src/file_system.cc src/file_system.h src/librsfs.h src/compression.cc src/bzip2/bzlib.c src/bzip2/compress.c src/bzip2/decompress.c src/bzip2/crctable.c src/bzip2/huffman.c src/bzip2/randtable.c src/bzip2/blocksort.c)
+set(ZLIB_SOURCES src/zlib/adler32.c src/zlib/compress.c src/zlib/crc32.c src/zlib/deflate.c src/zlib/gzclose.c src/zlib/gzlib.c src/zlib/gzread.c src/zlib/gzwrite.c src/zlib/inflate.c src/zlib/inffast.c src/zlib/inftrees.c src/zlib/uncompr.c src/zlib/trees.c src/zlib/zutil.c)
 
-add_executable(librsfs ${SOURCE_FILES} src/index.cc src/index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define executable for command-line usage
-add_library(rsfs SHARED ${SOURCE_FILES} src/index.cc src/index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define the shared library (.dll or .dylib or .a)
+add_executable(librsfs ${SOURCE_FILES} ${ZLIB_SOURCES} src/index.cc src/index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define executable for command-line usage
+add_library(rsfs SHARED ${SOURCE_FILES} ${ZLIB_SOURCES} src/index.cc src/index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define the shared library (.dll or .dylib or .a)
 
 # Define how the exported library will come out
 GENERATE_EXPORT_HEADER(rsfs
@@ -41,5 +41,5 @@ set_target_properties(librsfs PROPERTIES
                       COMPILE_FLAGS -DRSFS_BUILT_AS_STATIC)
 
 # Define dependencies of our build
-target_link_libraries(librsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBLZMA_LIBRARIES})
-target_link_libraries(rsfs ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${LIBLZMA_LIBRARIES})
+target_link_libraries(librsfs ${Boost_LIBRARIES} ${LIBLZMA_LIBRARIES})
+target_link_libraries(rsfs ${Boost_LIBRARIES} ${LIBLZMA_LIBRARIES})
