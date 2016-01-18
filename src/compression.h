@@ -8,7 +8,7 @@
 #include <boost/lexical_cast.hpp>
 #include <vector>
 #include <zlib.h>
-#include <bzlib.h>
+#include "bzip2/bzlib.h"
 #include <lzma.h>
 
 const static char *BZIP_HEADER = "BZh1";
