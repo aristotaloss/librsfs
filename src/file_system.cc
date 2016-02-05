@@ -14,34 +14,28 @@ FileSystem::~FileSystem() {
 
 void FileSystem::LoadDirectory(char *directory) {
 	// Do not allow to reload a directory
-	if (!main_file.empty()) {
-		throw std::runtime_error("file system has already been loaded");
+	if (main_file) {
+		//throw std::runtime_error("file system has already been loaded");
 	}
 
 	// Does this directory exist... or is it even a directory?
-	if (!boost::filesystem::exists(directory) || !boost::filesystem::is_directory(directory)) {
+	if (!IsFolder(directory)) {
 		throw std::runtime_error("directory is invalid or does not exist");
 	}
 
 	// Discover main_file_cache.dat2 (the '/' operator glues two paths)
-	auto main_file = path(directory) / "main_file_cache.dat2";
-	if (!boost::filesystem::exists(main_file)) {
+	auto main_file = std::string(directory) + std::string("/") + std::string("main_file_cache.dat2");
+	if (!FileExists(const_cast<char*>(main_file.data()))) {
 		throw std::runtime_error("filestore does not contain main_file_cache.dat2");
 	}
-	this->main_file = main_file;
+	this->main_file = const_cast<char*>(main_file.data());
 
 	// Load all the *.idx files
-	for (auto e : boost::make_iterator_range(directory_iterator(directory))) { // Loop
-		auto current = e.path();
-		auto extension = current.extension().string();
+	for (int index = 0; index <= 255; index++) {
+		auto indexfile = std::string(directory) + std::string("/") + std::string("main_file_cache.idx") + std::to_string(index);
 
-		if (boost::starts_with(extension, ".idx") && extension.size() > 4) { // Is this an index descriptor?
-			int index_id = atoi(extension.substr(4).c_str()); // Substring from 4, parse as integer.
-
-			// Check if the range is valid. If so, store it in our map.
-			if (index_id >= 0 && index_id <= 255) {
-				indices.insert(std::make_pair(index_id, Index(this, current)));
-			}
+		if (FileExists(const_cast<char*>(indexfile.data()))) {
+			indices.insert(std::make_pair(index, new Index(this, indexfile.data())));
 		}
 	}
 }
@@ -61,7 +55,7 @@ bool FileSystem::HasIndex(int index) {
 	return indices.count(index) != 0;
 }
 
-Index FileSystem::GetIndex(int directory_id) {
+Index *FileSystem::GetIndex(int directory_id) {
 	return indices.at(directory_id);
 }
 
@@ -82,7 +76,7 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 	if (!info.Exists())
 		return 0;
 
-	boost::filesystem::ifstream data_stream(main_file, std::ios_base::binary);
+	ifstream data_stream(main_file, std::ios_base::binary);
 	data_stream.seekg(static_cast<uint64_t>(info.GetOffset()), data_stream.beg);
 
 	// Were we able to seek there?

@@ -7,12 +7,9 @@
 
 #include "file_system.h"
 #include "folder_info.h"
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <vector>
+#include <string>
 
-using boost::filesystem::path;
 using namespace std;
 
 // Predeclarations
@@ -22,11 +19,11 @@ class FolderInfo;
 class Index {
 private:
 	FileSystem* file_system;
-	path index_file;
-	path main_file;
+	std::string index_file;
+	std::string main_file;
 
 public:
-	Index(FileSystem*, path);
+	Index(FileSystem*, std::string);
 	~Index();
 
 	/**
@@ -38,7 +35,7 @@ public:
 
 	FolderInfo GetFolderInfo(int id);
 
-	path GetFile();
+	std::string GetFile();
 
 	int GetRaw(int id, vector<char> &dest);
 

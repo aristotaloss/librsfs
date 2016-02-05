@@ -5,11 +5,10 @@
 #ifndef LIBRSFS_COMPRESSION_H
 #define LIBRSFS_COMPRESSION_H
 
-#include <boost/lexical_cast.hpp>
 #include <vector>
 #include "zlib/zlib.h"
 #include "bzip2/bzlib.h"
-#include <lzma.h>
+//#include <lzma.h>
 
 const static char *BZIP_HEADER = "BZh1";
 

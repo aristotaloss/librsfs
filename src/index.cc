@@ -4,9 +4,11 @@
 
 #include "index.h"
 
-Index::Index(FileSystem *file_system, path index_file) {
+Index::Index(FileSystem *file_system, std::string index_file) {
 	this->file_system = file_system;
-	this->index_file = index_file;
+	this->index_file = std::string(new char[index_file.length() + 1]);
+	
+	memcpy((void*) this->index_file.data(), index_file.data(), index_file.length() + 1);
 }
 
 Index::~Index() {
@@ -14,7 +16,10 @@ Index::~Index() {
 }
 
 int Index::GetEntryCount() {
-	return static_cast<int>(boost::filesystem::file_size(index_file) / 6);
+	std::ifstream in(index_file.c_str(), std::ifstream::ate | std::ifstream::binary);
+	int count = static_cast<int>(in.tellg() / 6L);
+	in.close();
+	return count;
 }
 
 FolderInfo Index::GetFolderInfo(int id) {
@@ -22,7 +27,7 @@ FolderInfo Index::GetFolderInfo(int id) {
 		return FolderInfo(0, 0, 0);
 
 	// Create a new stream and position it at the start of the file
-	boost::filesystem::ifstream stream(index_file, std::ios_base::in | std::ios_base::binary);
+	ifstream stream(index_file.c_str(), std::ios_base::in | std::ios_base::binary);
 	stream.seekg(id * 6, stream.beg);
 
 	// Were we able to seek there?
@@ -33,18 +38,17 @@ FolderInfo Index::GetFolderInfo(int id) {
 	char size_buf[3], offset_buf[3];
 	stream.read(size_buf, 3);
 	stream.read(offset_buf, 3);
+	stream.close();
 
 	// Turn data into integers and return info
 	auto size_in_bytes = ((size_buf[0] & 0xFF) << 16) | ((size_buf[1] & 0xFF) << 8) | (size_buf[2] & 0xFF);
 	auto offset_in_blocks = ((offset_buf[0] & 0xFF) << 16) | ((offset_buf[1] & 0xFF) << 8) | (offset_buf[2] & 0xFF);
 
-	// Close the stream to release the file lock
-	stream.close();
-
+	printf("%d, %d\n", size_in_bytes, offset_in_blocks);
 	return FolderInfo(id, size_in_bytes, offset_in_blocks);
 }
 
-path Index::GetFile() {
+std::string Index::GetFile() {
 	return index_file;
 }
 

@@ -2,7 +2,7 @@
 
 CompressionType Compression::GetCompressionType(char first_byte) {
 	if (((unsigned char)first_byte) > 3) {
-		throw std::runtime_error(std::string("invalid compression type ") + boost::lexical_cast<std::string>(first_byte));
+		throw std::runtime_error(std::string("invalid compression type ") /*+ boost::lexical_cast<std::string>(first_byte)*/);
 	}
 
 	return (CompressionType) first_byte;

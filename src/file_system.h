@@ -10,20 +10,16 @@
 #include "index.h"
 #include <stdio.h>
 #include <fstream>
+#include <string>
 #include <map>
 #include <vector>
-#include <boost/filesystem.hpp>
-#include <boost/range.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
 #include "compression.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using std::map;
 using std::vector;
 using std::string;
-using boost::filesystem::path;
-using boost::filesystem::directory_entry;
-using boost::filesystem::directory_iterator;
 
 typedef int FSResult;
 
@@ -31,6 +27,16 @@ typedef int FSResult;
 
 // Predeclarations
 class Index;
+
+inline bool FileExists(char *file) {
+	struct stat si;
+	return stat(file, &si) == 0;
+}
+
+inline bool IsFolder(char *file) {
+	struct stat si;
+	return stat(file, &si) == 0 && (si.st_mode & S_IFDIR);
+}
 
 /**
  * Filesystem base class which will hold the main file reference and also contains a map of all the indices.
@@ -64,13 +70,13 @@ public:
      */
 	bool HasIndex(int);
 
-	Index GetIndex(int directory_id);
+	Index *GetIndex(int directory_id);
 	int Read(FolderInfo info, vector<char> &dest);
 	int ReadAndDecompress(FolderInfo info, vector<char> &dest);
 
 private:
-	path main_file;
-	map<int, Index> indices;
+	char *main_file;
+	map<int, Index*> indices;
 };
 
 

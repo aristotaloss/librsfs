@@ -13,11 +13,11 @@ if((NOT DEFINED BOOST_ROOT) OR (NOT IS_DIRECTORY BOOST_ROOT))
 endif()
 
 # Please, dear CMake gods, find ZLib
-find_package(LibLZMA REQUIRED)
+find_package(LibLZMA)
 
-find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
-include_directories(${Boost_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS})
-link_directories(${Boost_LIBRARY_DIR})
+#find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
+#include_directories(${Boost_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS})
+#link_directories(${Boost_LIBRARY_DIR})
 
 # C++ flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libgcc -static-libstdc++")
