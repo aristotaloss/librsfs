@@ -54,7 +54,7 @@ std::string Index::get_file() {
 
 int Index::get_raw(int id, vector<char> &dest) {
 	FolderInfo info = get_folder_info(id);
-	if (!info.Exists())
+	if (!info.exists())
 		return 0;
 
 	return file_system->read(info, dest);
@@ -62,7 +62,7 @@ int Index::get_raw(int id, vector<char> &dest) {
 
 int Index::get_decompressed(int id, vector<char> &dest) {
 	FolderInfo info = get_folder_info(id);
-	if (!info.Exists())
+	if (!info.exists())
 		return 0;
 
 	return file_system->read_decompressed(info, dest);

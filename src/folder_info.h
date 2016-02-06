@@ -17,10 +17,10 @@ private:
 public:
 	FolderInfo(int id, int size, int offset);
 	~FolderInfo();
-	int GetSize();
-	int GetId();
-	uint64_t GetOffset();
-	bool Exists();
+	int get_size();
+	int get_id();
+	uint64_t get_offset();
+	bool exists();
 };
 
 

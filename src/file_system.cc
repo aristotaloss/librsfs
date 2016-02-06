@@ -88,29 +88,29 @@ int FileSystem::read_decompressed(FolderInfo info, vector<char> &dest) {
 
 int FileSystem::read(FolderInfo info, vector<char> &dest) {
 	// Make sure this operation isn't going to fail miserably
-	if (!info.Exists())
+	if (!info.exists())
 		return 0;
 
 	ifstream data_stream(main_file, std::ios_base::binary);
-	data_stream.seekg(static_cast<uint64_t>(info.GetOffset()), data_stream.beg);
+	data_stream.seekg(static_cast<uint64_t>(info.get_offset()), data_stream.beg);
 
 	// Were we able to seek there?
 	auto pos = data_stream.tellg();
-	if (info.GetOffset() != pos)
+	if (info.get_offset() != pos)
 		return 0;
 
 	// The big format was introduced around revision 667 because the IDs began to exceed 65535.
-	bool big_format = info.GetId() > 0xFFFF;
+	bool big_format = info.get_id() > 0xFFFF;
 	int header_size = big_format ? 10 : 8;
 	int data_size = BLOCK_SIZE - header_size;
-	int remaining = info.GetSize();
+	int remaining = info.get_size();
 
 	// Resize the destination buffer to the _presumed_ size. This is to avoid the vector needing to regenerate a buffer each time.
 	dest.reserve(remaining);
 
 	char scratch_buffer[BLOCK_SIZE];
 	int current_index = 0;
-	int current_id = info.GetId();
+	int current_id = info.get_id();
 	int current_part = -1;
 
 	while (remaining > 0) {

@@ -15,18 +15,18 @@ FolderInfo::~FolderInfo() {
 	// Stub
 }
 
-int FolderInfo::GetSize() {
+int FolderInfo::get_size() {
 	return size;
 }
 
-uint64_t FolderInfo::GetOffset() {
+uint64_t FolderInfo::get_offset() {
 	return static_cast<uint64_t>(offset) * 520L;
 }
 
-bool FolderInfo::Exists() {
+bool FolderInfo::exists() {
 	return size > 0;
 }
 
-int FolderInfo::GetId() {
+int FolderInfo::get_id() {
 	return id;
 }
