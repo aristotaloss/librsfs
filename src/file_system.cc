@@ -42,6 +42,8 @@ void FileSystem::LoadDirectory(char *directory) {
 		if (FileExists(const_cast<char*>(full_path))) {
 			indices.insert(std::make_pair(index, new Index(this, std::string(full_path))));
 		}
+
+		delete[] full_path;
 	}
 }
 
