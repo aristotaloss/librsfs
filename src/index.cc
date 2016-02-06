@@ -15,15 +15,15 @@ Index::~Index() {
 
 }
 
-int Index::GetEntryCount() {
+int Index::get_entry_count() {
 	std::ifstream in(index_file.c_str(), std::ifstream::ate | std::ifstream::binary);
 	int count = static_cast<int>(in.tellg() / 6L);
 	in.close();
 	return count;
 }
 
-FolderInfo Index::GetFolderInfo(int id) {
-	if (id >= GetEntryCount())
+FolderInfo Index::get_folder_info(int id) {
+	if (id >= get_entry_count())
 		return FolderInfo(0, 0, 0);
 
 	// Create a new stream and position it at the start of the file
@@ -48,20 +48,20 @@ FolderInfo Index::GetFolderInfo(int id) {
 	return FolderInfo(id, size_in_bytes, offset_in_blocks);
 }
 
-std::string Index::GetFile() {
+std::string Index::get_file() {
 	return index_file;
 }
 
-int Index::GetRaw(int id, vector<char> &dest) {
-	FolderInfo info = GetFolderInfo(id);
+int Index::get_raw(int id, vector<char> &dest) {
+	FolderInfo info = get_folder_info(id);
 	if (!info.Exists())
 		return 0;
 
 	return file_system->read(info, dest);
 }
 
-int Index::GetDecompressed(int id, vector<char> &dest) {
-	FolderInfo info = GetFolderInfo(id);
+int Index::get_decompressed(int id, vector<char> &dest) {
+	FolderInfo info = get_folder_info(id);
 	if (!info.Exists())
 		return 0;
 

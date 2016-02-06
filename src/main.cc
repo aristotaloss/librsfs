@@ -12,11 +12,11 @@ int main() {
 		filesystem.load_directory(const_cast<char *>("C:\\Users\\Bart\\Documents\\osrs-server\\data\\filestore"));
 
 		for (auto a = 0; a < filesystem.get_index_count(); a++) {
-			printf("Index %d has %d folders\n", a, filesystem.get_index(a)->GetEntryCount());
+			printf("Index %d has %d folders\n", a, filesystem.get_index(a)->get_entry_count());
 
-			for (int f = 0; f < filesystem.get_index(a)->GetEntryCount(); f++) {
+			for (int f = 0; f < filesystem.get_index(a)->get_entry_count(); f++) {
 				try {
-					FolderInfo info = filesystem.get_index(a)->GetFolderInfo(f);
+					FolderInfo info = filesystem.get_index(a)->get_folder_info(f);
 					vector<char> data0_11;
 					int rdnum = filesystem.read(info, data0_11);
 
@@ -35,9 +35,9 @@ int main() {
 
 		printf("Number of indices: %d\n", filesystem.get_index_count());
 		printf("Has index 15: %d, has 16: %d\n", filesystem.has_index(15), filesystem.has_index(16));
-		printf("Number of files in model directory: %d\n", filesystem.get_index(7)->GetEntryCount());
+		printf("Number of files in model directory: %d\n", filesystem.get_index(7)->get_entry_count());
     
-		FolderInfo info = filesystem.get_index(2)->GetFolderInfo(10);
+		FolderInfo info = filesystem.get_index(2)->get_folder_info(10);
 		vector<char> data;
 		int rdnum = filesystem.read(info, data);
 		vector<char> decompressed;

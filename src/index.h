@@ -32,15 +32,15 @@ public:
      * number of non-empty data entries as a directory may contain a folder with ID 4 and one with ID 6 for example,
      * which will make this method return 6 even though only 2 are valid.
      */
-	int GetEntryCount();
+	int get_entry_count();
 
-	FolderInfo GetFolderInfo(int id);
+	FolderInfo get_folder_info(int id);
 
-	std::string GetFile();
+	std::string get_file();
 
-	int GetRaw(int id, vector<char> &dest);
+	int get_raw(int id, vector<char> &dest);
 
-	int GetDecompressed(int id, vector<char> &dest);
+	int get_decompressed(int id, vector<char> &dest);
 };
 
 
