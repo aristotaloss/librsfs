@@ -12,6 +12,12 @@ FileSystem::~FileSystem() {
 	if (main_file) {
 		delete[] main_file;
 	}
+
+	// Clean up indices
+	for (auto &entry : indices) {
+		if (entry.second) // We don't see the fs descriptor as an index
+			delete entry.second;
+	}
 }
 
 void FileSystem::LoadDirectory(char *directory) {
