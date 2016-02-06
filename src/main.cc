@@ -12,7 +12,6 @@ int main() {
 		filesystem.LoadDirectory(const_cast<char *>("C:\\Users\\Bart\\Documents\\osrs-server\\data\\filestore"));
 
 		for (auto a = 0; a < filesystem.GetIndexCount(); a++) {
-			//int a = 255;
 			printf("Index %d has %d folders\n", a, filesystem.GetIndex(a)->GetEntryCount());
 
 			for (int f = 0; f < filesystem.GetIndex(a)->GetEntryCount(); f++) {
@@ -28,11 +27,6 @@ int main() {
 							printf("FOUND\n");
 						}
 					}
-
-					if (rdnum > 0)
-					 	printf("Read %d bytes for folder %d.\n", rdnum, f);
-					else
-					 	printf("folder %d seems empty? %d %d %ull\n", f, info.GetSize(), info.GetId(), info.GetOffset());
 				} catch (const std::exception &exc) {
 					printf("error with %d: %s\n", f, exc.what());
 				}
@@ -42,7 +36,6 @@ int main() {
 		printf("Number of indices: %d\n", filesystem.GetIndexCount());
 		printf("Has index 15: %d, has 16: %d\n", filesystem.HasIndex(15), filesystem.HasIndex(16));
 		printf("Number of files in model directory: %d\n", filesystem.GetIndex(7)->GetEntryCount());
-		//filesystem.GetIndex(7)
     
 		FolderInfo info = filesystem.GetIndex(2)->GetFolderInfo(10);
 		vector<char> data;
@@ -53,7 +46,7 @@ int main() {
 		ofstream fout;
 		fout.open("file.bin", ios::binary | ios::out);
 		fout.write(decompressed.data(), decompressed.size());
-		fout.close();	
+		fout.close();
 		printf("DONE! %d\n", decompressed.size());
 	} catch (const std::exception &exc) {
 		printf("Error loading directory: %s\n", exc.what());
