@@ -57,7 +57,7 @@ int Index::GetRaw(int id, vector<char> &dest) {
 	if (!info.Exists())
 		return 0;
 
-	return file_system->Read(info, dest);
+	return file_system->read(info, dest);
 }
 
 int Index::GetDecompressed(int id, vector<char> &dest) {
@@ -65,5 +65,5 @@ int Index::GetDecompressed(int id, vector<char> &dest) {
 	if (!info.Exists())
 		return 0;
 
-	return file_system->ReadAndDecompress(info, dest);
+	return file_system->read_decompressed(info, dest);
 }

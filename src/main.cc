@@ -9,16 +9,16 @@ int main() {
     FileSystem filesystem;
 
 	try {
-		filesystem.LoadDirectory(const_cast<char *>("C:\\Users\\Bart\\Documents\\osrs-server\\data\\filestore"));
+		filesystem.load_directory(const_cast<char *>("C:\\Users\\Bart\\Documents\\osrs-server\\data\\filestore"));
 
-		for (auto a = 0; a < filesystem.GetIndexCount(); a++) {
-			printf("Index %d has %d folders\n", a, filesystem.GetIndex(a)->GetEntryCount());
+		for (auto a = 0; a < filesystem.get_index_count(); a++) {
+			printf("Index %d has %d folders\n", a, filesystem.get_index(a)->GetEntryCount());
 
-			for (int f = 0; f < filesystem.GetIndex(a)->GetEntryCount(); f++) {
+			for (int f = 0; f < filesystem.get_index(a)->GetEntryCount(); f++) {
 				try {
-					FolderInfo info = filesystem.GetIndex(a)->GetFolderInfo(f);
+					FolderInfo info = filesystem.get_index(a)->GetFolderInfo(f);
 					vector<char> data0_11;
-					int rdnum = filesystem.Read(info, data0_11);
+					int rdnum = filesystem.read(info, data0_11);
 
 					if (rdnum >= 5) {
 						auto compress = CompressionInfo(data0_11);
@@ -33,13 +33,13 @@ int main() {
 			}
 		}
 
-		printf("Number of indices: %d\n", filesystem.GetIndexCount());
-		printf("Has index 15: %d, has 16: %d\n", filesystem.HasIndex(15), filesystem.HasIndex(16));
-		printf("Number of files in model directory: %d\n", filesystem.GetIndex(7)->GetEntryCount());
+		printf("Number of indices: %d\n", filesystem.get_index_count());
+		printf("Has index 15: %d, has 16: %d\n", filesystem.has_index(15), filesystem.has_index(16));
+		printf("Number of files in model directory: %d\n", filesystem.get_index(7)->GetEntryCount());
     
-		FolderInfo info = filesystem.GetIndex(2)->GetFolderInfo(10);
+		FolderInfo info = filesystem.get_index(2)->GetFolderInfo(10);
 		vector<char> data;
-		int rdnum = filesystem.Read(info, data);
+		int rdnum = filesystem.read(info, data);
 		vector<char> decompressed;
 		int num = Compression::Decompress(data, decompressed);
 

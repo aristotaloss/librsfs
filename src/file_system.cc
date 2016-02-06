@@ -20,20 +20,20 @@ FileSystem::~FileSystem() {
 	}
 }
 
-void FileSystem::LoadDirectory(char *directory) {
+void FileSystem::load_directory(char *directory) {
 	// Do not allow to reload a directory
 	if (main_file) {
 		//throw std::runtime_error("file system has already been loaded");
 	}
 
 	// Does this directory exist... or is it even a directory?
-	if (!IsFolder(directory)) {
+	if (!is_folder(directory)) {
 		throw std::runtime_error("directory is invalid or does not exist");
 	}
 
 	// Discover main_file_cache.dat2 (the '/' operator glues two paths)
 	auto main_file = std::string(directory) + std::string("/") + std::string("main_file_cache.dat2");
-	if (!FileExists(const_cast<char*>(main_file.data()))) {
+	if (!file_exists(const_cast<char*>(main_file.data()))) {
 		throw std::runtime_error("filestore does not contain main_file_cache.dat2");
 	}
 
@@ -47,7 +47,7 @@ void FileSystem::LoadDirectory(char *directory) {
 		sprintf(full_path, "%s/main_file_cache.idx%d", directory, index);
 
 		// If this index file exists, put it in our library.
-		if (FileExists(const_cast<char*>(full_path))) {
+		if (file_exists(const_cast<char*>(full_path))) {
 			indices.insert(std::make_pair(index, new Index(this, std::string(full_path))));
 		}
 
@@ -55,7 +55,7 @@ void FileSystem::LoadDirectory(char *directory) {
 	}
 }
 
-int FileSystem::GetIndexCount() {
+int FileSystem::get_index_count() {
 	auto count = 0;
 
 	for (auto &entry : indices) {
@@ -66,27 +66,27 @@ int FileSystem::GetIndexCount() {
 	return count;
 }
 
-bool FileSystem::HasIndex(int index) {
+bool FileSystem::has_index(int index) {
 	return indices.count(index) != 0;
 }
 
-Index *FileSystem::GetIndex(int directory_id) {
+Index *FileSystem::get_index(int directory_id) {
 	return indices.at(directory_id);
 }
 
-int FileSystem::ReadAndDecompress(FolderInfo info, vector<char> &dest) {
+int FileSystem::read_decompressed(FolderInfo info, vector<char> &dest) {
 	vector<char> raw;
-	int read = Read(info, raw);
+	int num_read = read(info, raw);
 
 	// Were we unable to get some data?
-	if (read == 0)
+	if (num_read == 0)
 		return 0;
 
 	// All is good, decompress.
 	return Compression::Decompress(raw, dest);
 }
 
-int FileSystem::Read(FolderInfo info, vector<char> &dest) {
+int FileSystem::read(FolderInfo info, vector<char> &dest) {
 	// Make sure this operation isn't going to fail miserably
 	if (!info.Exists())
 		return 0;
