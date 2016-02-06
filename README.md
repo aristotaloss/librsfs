@@ -95,7 +95,7 @@ auto num_read = filesystem.Read(model_folder_1234, entry_data);
 
 ## Decompressing an entry
 
-Some entries are compressed. Actually, most of them are. They are either compressed with gzip or with bzip2. Currently, librsfs only supports gzip.
+Some entries are compressed. Actually, most of them are. They are either compressed with gzip or with bzip2, or LZMA in the newest RS3. Librsfs supports gzip, bzip2 and, when found on the build path, lzma (which is used in the later versions of RuneScape 3).
 
 ```c++
 vector<char> decompressed;
