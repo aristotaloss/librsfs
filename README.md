@@ -32,16 +32,12 @@ cd librsfs-build
 Now invoke the CMake command with the defines to ensure everything's easy to find:
 
 ```
-cmake ../librsfs -DBOOST_ROOT="C:/boost_1_58_0" -G "Visual Studio 12 Win64"
+cmake ../librsfs -G "Visual Studio 12 Win64"
 ```
 
 The above command builds for an x64 release. If you are looking for the 32-bit build, leave out Win64 when passing the generator to CMake. Note that this requires you to have built both ZLib and BZip2 yourself in advance, otherwise building will fail because there are no libraries.
 
 This will create a solution file, a few project files and the other good stuff for you ready to open & build.
-
-### boost
-
-Building boost on Windows isn't too hard to do as the Boost Build project makes it easy for you, even on Windows. If you can't get it to work, however, you can also grab a pre-built binary release from [someone nice who understands your pain](http://sourceforge.net/projects/boost/files/boost-binaries/1.58.0/). Install the correct version (don't install an x64 variant if you want to build librsfs as 32 bit library) and make sure to pass the correct BOOST_ROOT path to CMake aswell.
 
 ## On any other programmer-friendly operating system
 
