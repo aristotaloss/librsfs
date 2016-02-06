@@ -28,14 +28,19 @@ void FileSystem::LoadDirectory(char *directory) {
 	if (!FileExists(const_cast<char*>(main_file.data()))) {
 		throw std::runtime_error("filestore does not contain main_file_cache.dat2");
 	}
-	this->main_file = const_cast<char*>(main_file.data());
+
+	this->main_file = new char[main_file.length() + 1];
+	strcpy_s(this->main_file, main_file.length() + 1, main_file.data());
 
 	// Load all the *.idx files
 	for (int index = 0; index <= 255; index++) {
-		auto indexfile = std::string(directory) + std::string("/") + std::string("main_file_cache.idx") + std::to_string(index);
+		int buffer_size = strlen(directory) + 1 + strlen("main_file_cache.idx") + 5;
+		char *full_path = new char[buffer_size];
+		sprintf_s(full_path, buffer_size, "%s/main_file_cache.idx%d", directory, index);
 
-		if (FileExists(const_cast<char*>(indexfile.data()))) {
-			indices.insert(std::make_pair(index, new Index(this, indexfile.data())));
+		// If this index file exists, put it in our library.
+		if (FileExists(const_cast<char*>(full_path))) {
+			indices.insert(std::make_pair(index, new Index(this, std::string(full_path))));
 		}
 	}
 }
@@ -76,11 +81,12 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 	if (!info.Exists())
 		return 0;
 
-	ifstream data_stream(main_file, std::ios_base::binary);
-	data_stream.seekg(static_cast<uint64_t>(info.GetOffset()), data_stream.beg);
+	ifstream *data_stream = new ifstream(main_file, std::ios_base::binary);
+	data_stream->seekg(static_cast<uint64_t>(info.GetOffset()), data_stream->beg);
 
 	// Were we able to seek there?
-	if (info.GetOffset() != data_stream.tellg())
+	auto pos = data_stream->tellg();
+	if (info.GetOffset() != pos)
 		return 0;
 
 	// The big format was introduced around revision 667 because the IDs began to exceed 65535.
@@ -95,7 +101,7 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 	int current_part = -1;
 
 	while (remaining > 0) {
-		data_stream.read(scratch_buffer, BLOCK_SIZE); // Grab some data to use
+		data_stream->read(scratch_buffer, BLOCK_SIZE); // Grab some data to use
 
 		uint32_t folder_id;
 		int part_id;
@@ -125,13 +131,14 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 		dest.insert(dest.end(), &scratch_buffer[header_size], &scratch_buffer[num_left + header_size]);
 
 		// Position us to the next block
-		data_stream.seekg(static_cast<uint64_t>(next_offset) * static_cast<uint64_t>(BLOCK_SIZE), data_stream.beg);
+		data_stream->seekg(static_cast<uint64_t>(next_offset) * static_cast<uint64_t>(BLOCK_SIZE), data_stream->beg);
 
 		current_part = part_id;
 		remaining -= data_size;
-		printf("seek to %lld with %d remaining\n", static_cast<uint64_t>(next_offset) * static_cast<uint64_t>(BLOCK_SIZE), remaining);
 	}
 
-	data_stream.close();
+	data_stream->close();
+	delete data_stream;
+
 	return dest.size();
 }

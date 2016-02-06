@@ -9,7 +9,7 @@ int main() {
     FileSystem filesystem;
 
 	try {
-		filesystem.LoadDirectory(const_cast<char *>("/home/server/rsfs/librsfs/data/"));
+		filesystem.LoadDirectory(const_cast<char *>("C:\\Users\\Bart\\Documents\\osrs-server\\data\\filestore"));
 
 		for (auto a = 0; a < filesystem.GetIndexCount(); a++) {
 			//int a = 255;
@@ -18,7 +18,6 @@ int main() {
 			for (int f = 0; f < filesystem.GetIndex(a)->GetEntryCount(); f++) {
 				try {
 					FolderInfo info = filesystem.GetIndex(a)->GetFolderInfo(f);
-					printf("%d,%d,%d\n", info.GetId(), info.GetOffset(), info.GetSize());
 					vector<char> data0_11;
 					int rdnum = filesystem.Read(info, data0_11);
 
@@ -30,10 +29,10 @@ int main() {
 						}
 					}
 
-					//if (rdnum > 0)
-					// 	printf("it worked for %d but %d..\n", f, data0_11[0]);
-					//else
-					// 	printf("folder %d seems empty? %d %d %ull\n", f, info.GetSize(), info.GetId(), info.GetOffset());
+					if (rdnum > 0)
+					 	printf("Read %d bytes for folder %d.\n", rdnum, f);
+					else
+					 	printf("folder %d seems empty? %d %d %ull\n", f, info.GetSize(), info.GetId(), info.GetOffset());
 				} catch (const std::exception &exc) {
 					printf("error with %d: %s\n", f, exc.what());
 				}

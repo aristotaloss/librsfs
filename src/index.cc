@@ -27,24 +27,24 @@ FolderInfo Index::GetFolderInfo(int id) {
 		return FolderInfo(0, 0, 0);
 
 	// Create a new stream and position it at the start of the file
-	ifstream stream(index_file.c_str(), std::ios_base::in | std::ios_base::binary);
-	stream.seekg(id * 6, stream.beg);
+	ifstream *stream = new ifstream(index_file.c_str(), std::ios_base::in | std::ios_base::binary);
+	stream->seekg(id * 6, stream->beg);
 
 	// Were we able to seek there?
-	if (id * 6 != stream.tellg())
+	if (id * 6 != stream->tellg())
 		return FolderInfo(0, 0, 0);
 
 	// Read the six bytes of info from the stream
 	char size_buf[3], offset_buf[3];
-	stream.read(size_buf, 3);
-	stream.read(offset_buf, 3);
-	stream.close();
+	stream->read(size_buf, 3);
+	stream->read(offset_buf, 3);
+	stream->close();
 
 	// Turn data into integers and return info
 	auto size_in_bytes = ((size_buf[0] & 0xFF) << 16) | ((size_buf[1] & 0xFF) << 8) | (size_buf[2] & 0xFF);
 	auto offset_in_blocks = ((offset_buf[0] & 0xFF) << 16) | ((offset_buf[1] & 0xFF) << 8) | (offset_buf[2] & 0xFF);
 
-	printf("%d, %d\n", size_in_bytes, offset_in_blocks);
+	delete stream;
 	return FolderInfo(id, size_in_bytes, offset_in_blocks);
 }
 

@@ -11,7 +11,13 @@ CompressionType Compression::GetCompressionType(char first_byte) {
 CompressionInfo::CompressionInfo(std::vector<char> &data) {
 	compression_type = Compression::GetCompressionType(data[0]);
 	compressed_size = ((data[1] & 0xFF) << 24) | ((data[2] & 0xFF) << 16) | ((data[3] & 0xFF) << 8) | (data[4] & 0xFF);
-	decompressed_size = ((data[5] & 0xFF) << 24) | ((data[6] & 0xFF) << 16) | ((data[7] & 0xFF) << 8) | (data[8] & 0xFF);
+
+	// There is no compression type if it isn't compressed
+	if (compression_type != NONE) {
+		decompressed_size = ((data[5] & 0xFF) << 24) | ((data[6] & 0xFF) << 16) | ((data[7] & 0xFF) << 8) | (data[8] & 0xFF);
+	} else {
+		decompressed_size = compressed_size;
+	}
 }
 
 int Compression::Decompress(std::vector<char> &original, std::vector<char> &destination) {
@@ -20,7 +26,6 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 
 	destination.resize(compression_info.GetDecompressedSize());
 
-	printf("Compr %d\n", compression_type);
 	if (compression_type == CompressionType::GZIP) { // Decompress using gzip (or well, skip the gzip header and use plain lzma inflating)
 		auto strm = new z_stream();
 		strm->avail_in = original.size();
