@@ -9,6 +9,7 @@
 #include "folder_info.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 using namespace std;
 
