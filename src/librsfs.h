@@ -9,20 +9,20 @@
 #  ifndef RSFS_EXPORT
 #    ifdef rsfs_EXPORTS
         /* We are building this library */
-#      define RSFS_EXPORT __declspec(dllexport)
+#      define RSFS_EXPORT __attribute__((visibility("default")))
 #    else
         /* We are using this library */
-#      define RSFS_EXPORT __declspec(dllimport)
+#      define RSFS_EXPORT __attribute__((visibility("default")))
 #    endif
 #  endif
 
 #  ifndef LIBRSFS_NO_EXPORT
-#    define LIBRSFS_NO_EXPORT 
+#    define LIBRSFS_NO_EXPORT __attribute__((visibility("hidden")))
 #  endif
 #endif
 
 #ifndef LIBRSFS_DEPRECATED
-#  define LIBRSFS_DEPRECATED __declspec(deprecated)
+#  define LIBRSFS_DEPRECATED __attribute__ ((__deprecated__))
 #endif
 
 #ifndef LIBRSFS_DEPRECATED_EXPORT

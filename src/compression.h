@@ -10,7 +10,7 @@
 #include "bzip2/bzlib.h"
 #include <exception>
 #include <stdexcept>
-#include <memory>
+#include <memory.h>
 //#include <lzma.h>
 
 const static char *BZIP_HEADER = "BZh1";
