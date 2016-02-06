@@ -9,7 +9,9 @@ FileSystem::FileSystem() {
 }
 
 FileSystem::~FileSystem() {
-	// Stub
+	if (main_file) {
+		delete[] main_file;
+	}
 }
 
 void FileSystem::LoadDirectory(char *directory) {
