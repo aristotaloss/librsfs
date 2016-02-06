@@ -45,7 +45,7 @@ This will create a solution file, a few project files and the other good stuff f
 ```c++
 try {
 	FileSystem filesystem;
-	filesystem.LoadIndex(your_directory);
+	filesystem.load_index(your_directory);
 } catch (const std::exception &exc) {
 	printf("Error loading directory: %s\n", exc.what());
 }
@@ -54,21 +54,21 @@ try {
 ## Checking the number of indices
 
 ```c++
-auto count = filesystem.GetIndexCount();
+auto count = filesystem.get_index_count();
 ```
 
 ## Checking the (assumed) number of entries in an index
 
 This does not necessarily check the actual number of 'valid' entries, but guesses the number based on the highest entry ID. Since the entries could look like `1, 4, 77, 78, 79` this does not accurately match the actual number of entries containing data. The method would, using above data, return 79, while it actually only has 5 entries.
 ```c++
-auto highest_entry_id = filesystem.GetIndex(0).GetEntryCount();
+auto highest_entry_id = filesystem.get_index(0).GetEntryCount();
 ```
 
 ## Getting information on an entry
 
 To acquire information about an entry (its starting offset and its size), use the method shown below.
 ```c++
-auto model_folder_1234 = filesystem.GetIndex(7).GetFolderInfo(1234);
+auto model_folder_1234 = filesystem.get_index(7).GetFolderInfo(1234);
 auto size = model_folder_0.GetSize(); // Full size of this entry (in compressed form, that is)
 auto offset = model_folder_0.GetOffset(); // Absolute file offset where the data starts
 ```
@@ -80,7 +80,7 @@ Reading data is easy to do. Note that this data may be compressed!
 ```c++
 vector<char> entry_data;
 // see above on how to get model_folder_1234 defined
-auto num_read = filesystem.Read(model_folder_1234, entry_data);
+auto num_read = filesystem.read(model_folder_1234, entry_data);
 ```
 
 ## Decompressing an entry
