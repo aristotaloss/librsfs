@@ -6,8 +6,8 @@
 
 Index::Index(FileSystem *file_system, std::string index_file) {
 	this->file_system = file_system;
-	this->index_file = std::string(new char[index_file.length() + 1]);
-	
+	this->index_file = std::string(index_file.length() + 1, '\0');
+
 	memcpy((void*) this->index_file.data(), index_file.data(), index_file.length() + 1);
 }
 
