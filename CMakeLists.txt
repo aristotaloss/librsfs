@@ -6,18 +6,9 @@ include(GenerateExportHeader)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 set(CMAKE_BUILD_TYPE Debug)
 
-# Warn when there is no BOOST_ROOT defined (which will result in the project not compiling).
-if((NOT DEFINED BOOST_ROOT) OR (NOT IS_DIRECTORY BOOST_ROOT))
-    message(WARNING "No BOOST_ROOT defined. If CMake fails, please set a compiler flag to:")
-    message(WARNING "-D BOOST_ROOT=boostpathhere.")
-endif()
-
 # Please, dear CMake gods, find ZLib
 find_package(LibLZMA)
-
-#find_package(Boost COMPONENTS system iostreams filesystem REQUIRED)
-#include_directories(${Boost_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS})
-#link_directories(${Boost_LIBRARY_DIR})
+include_directories(${LIBLZMA_INCLUDE_DIRS})
 
 # C++ flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libgcc -static-libstdc++")
@@ -41,5 +32,5 @@ set_target_properties(librsfs PROPERTIES
                       COMPILE_FLAGS -DRSFS_BUILT_AS_STATIC)
 
 # Define dependencies of our build
-target_link_libraries(librsfs ${Boost_LIBRARIES} ${LIBLZMA_LIBRARIES})
-target_link_libraries(rsfs ${Boost_LIBRARIES} ${LIBLZMA_LIBRARIES})
+target_link_libraries(librsfs ${LIBLZMA_LIBRARIES})
+target_link_libraries(rsfs ${LIBLZMA_LIBRARIES})
