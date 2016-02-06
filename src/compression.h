@@ -29,8 +29,8 @@ enum CompressionType {
 
 class Compression {
 public:
-	static CompressionType GetCompressionType(char first_byte);
-	static int Decompress(std::vector<char>& original, std::vector<char>& destination);
+	static CompressionType get_compression_type(char first_byte);
+	static int decompress(std::vector<char>& original, std::vector<char>& destination);
 };
 
 class CompressionInfo {
@@ -40,7 +40,7 @@ private:
 	int decompressed_size;
 public:
 	CompressionInfo(std::vector<char>& data);
-	CompressionType GetCompressionType();
-	int GetCompressedSize();
-	int GetDecompressedSize();
+	CompressionType get_compression_type();
+	int get_compressed_size();
+	int get_decompressed_size();
 };

@@ -83,7 +83,7 @@ int FileSystem::read_decompressed(FolderInfo info, vector<char> &dest) {
 		return 0;
 
 	// All is good, decompress.
-	return Compression::Decompress(raw, dest);
+	return Compression::decompress(raw, dest);
 }
 
 int FileSystem::read(FolderInfo info, vector<char> &dest) {

@@ -1,6 +1,6 @@
 #include "compression.h"
 
-CompressionType Compression::GetCompressionType(char first_byte) {
+CompressionType Compression::get_compression_type(char first_byte) {
 	if (((unsigned char)first_byte) > 3) {
 		throw std::runtime_error(std::string("invalid compression type ") /*+ boost::lexical_cast<std::string>(first_byte)*/);
 	}
@@ -9,7 +9,7 @@ CompressionType Compression::GetCompressionType(char first_byte) {
 }
 
 CompressionInfo::CompressionInfo(std::vector<char> &data) {
-	compression_type = Compression::GetCompressionType(data[0]);
+	compression_type = Compression::get_compression_type(data[0]);
 	compressed_size = ((data[1] & 0xFF) << 24) | ((data[2] & 0xFF) << 16) | ((data[3] & 0xFF) << 8) | (data[4] & 0xFF);
 
 	// There is no compression type if it isn't compressed
@@ -20,11 +20,11 @@ CompressionInfo::CompressionInfo(std::vector<char> &data) {
 	}
 }
 
-int Compression::Decompress(std::vector<char> &original, std::vector<char> &destination) {
+int Compression::decompress(std::vector<char> &original, std::vector<char> &destination) {
 	CompressionInfo compression_info(original);
-	auto compression_type = compression_info.GetCompressionType();
+	auto compression_type = compression_info.get_compression_type();
 
-	destination.resize(compression_info.GetDecompressedSize());
+	destination.resize(compression_info.get_decompressed_size());
 
 	if (compression_type == CompressionType::GZIP) { // Decompress using gzip (or well, skip the gzip header and use plain lzma inflating)
 		auto strm = new z_stream();
@@ -71,7 +71,7 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 		forged_input.resize(original.size() - 9 + 8);
 
 		memcpy(forged_input.data(), original.data() + 9, 5); // Copy properties and dict size
-		auto decompressed_size = compression_info.GetDecompressedSize();
+		auto decompressed_size = compression_info.get_decompressed_size();
 		forged_input[5] = (char) (decompressed_size);
 		forged_input[6] = (char) (decompressed_size >> 8);
 		forged_input[7] = (char) (decompressed_size >> 16);
@@ -101,14 +101,14 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 	return 0;
 }
 
-CompressionType CompressionInfo::GetCompressionType() {
+CompressionType CompressionInfo::get_compression_type() {
 	return compression_type;
 }
 
-int CompressionInfo::GetCompressedSize() {
+int CompressionInfo::get_compressed_size() {
 	return compressed_size;
 }
 
-int CompressionInfo::GetDecompressedSize() {
+int CompressionInfo::get_decompressed_size() {
 	return decompressed_size;
 }

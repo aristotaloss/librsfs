@@ -23,7 +23,7 @@ int main() {
 					if (rdnum >= 5) {
 						auto compress = CompressionInfo(data0_11);
 
-						if (compress.GetCompressionType() == LZMA) {
+						if (compress.get_compression_type() == LZMA) {
 							printf("FOUND\n");
 						}
 					}
@@ -41,7 +41,7 @@ int main() {
 		vector<char> data;
 		int rdnum = filesystem.read(info, data);
 		vector<char> decompressed;
-		int num = Compression::Decompress(data, decompressed);
+		int num = Compression::decompress(data, decompressed);
 
 		ofstream fout;
 		fout.open("file.bin", ios::binary | ios::out);
