@@ -17,10 +17,8 @@ either be plain (compressed) data themselves, or contain individual files.
 
 # Building
 
-## On Windows
-
-### librsfs
-Since it's pretty much impossible to let CMake find everything needed immediately on Windows you'll most likely have to do some -D'ing yourself when invoking the CMake command.
+## librsfs
+Since 0.1.0, building has become significantly easier because the bzip2 and gzip dependencies are now included in the project and compiled on the go. This means that this project no longer has any required external dependencies, besides the optional LZMA which is only required on very recent versions of the RuneScape 3 file store.
 
 First of all, make a new directory. Out-of-source builds are so much nicer (and you don't get all the Git clobbing!).
 
@@ -35,13 +33,9 @@ Now invoke the CMake command with the defines to ensure everything's easy to fin
 cmake ../librsfs -G "Visual Studio 12 Win64"
 ```
 
-The above command builds for an x64 release. If you are looking for the 32-bit build, leave out Win64 when passing the generator to CMake. Note that this requires you to have built both ZLib and BZip2 yourself in advance, otherwise building will fail because there are no libraries.
+The above command builds for an x64 release. If you are looking for the 32-bit build, leave out Win64 when passing the generator to CMake. If CMake can find the LZMA libraries on your system, it will include them in the build and librsfs will then support LZMA-compressed archives. If not, no problem. Almost all file systems work without LZMA.
 
 This will create a solution file, a few project files and the other good stuff for you ready to open & build.
-
-## On any other programmer-friendly operating system
-
-It's less hassle on a unix system (by far) as CMake can properly detect everything you need, and what's missing can be installed through your package manager. Even it that fails, it's probably a two second job to build the libraries from source. CMake will simply generate a makefile which is ready to be invoked.
 
 
 # Usage
