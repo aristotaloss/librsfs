@@ -11,7 +11,7 @@ find_package(LibLZMA)
 include_directories(${LIBLZMA_INCLUDE_DIRS})
 
 # Make the C compiler know we have LZMA
-if(LZMA_FOUND)
+if(LIBLZMA_FOUND)
   add_definitions(-DLZMA_FOUND)
 endif()
 
