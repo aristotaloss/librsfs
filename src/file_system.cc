@@ -81,7 +81,7 @@ int FileSystem::Read(FolderInfo info, vector<char> &dest) {
 	if (!info.Exists())
 		return 0;
 
-	ifstream data_stream = ifstream(main_file, std::ios_base::binary);
+	ifstream &data_stream = ifstream(main_file, std::ios_base::binary);
 	data_stream.seekg(static_cast<uint64_t>(info.GetOffset()), data_stream.beg);
 
 	// Were we able to seek there?
