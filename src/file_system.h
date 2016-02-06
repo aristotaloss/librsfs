@@ -10,7 +10,7 @@
 #include "index.h"
 #include <stdio.h>
 #include <fstream>
-#include <string>
+#include <string.h>
 #include <map>
 #include <vector>
 #include "compression.h"
