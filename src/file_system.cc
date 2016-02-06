@@ -30,7 +30,7 @@ void FileSystem::LoadDirectory(char *directory) {
 	}
 
 	this->main_file = new char[main_file.length() + 1];
-	strcpy_s(this->main_file, main_file.length() + 1, main_file.data());
+	strcpy(this->main_file, main_file.data());
 
 	// Load all the *.idx files
 	for (int index = 0; index <= 255; index++) {
