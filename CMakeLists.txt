@@ -10,6 +10,11 @@ set(CMAKE_BUILD_TYPE Debug)
 find_package(LibLZMA)
 include_directories(${LIBLZMA_INCLUDE_DIRS})
 
+# Make the C compiler know we have LZMA
+if(LZMA_FOUND)
+  add_definitions(-DLZMA_FOUND)
+endif()
+
 # C++ flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libgcc -static-libstdc++")
 

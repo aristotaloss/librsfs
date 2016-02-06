@@ -2,8 +2,7 @@
 // Created by Bart on 4/24/2015.
 //
 
-#ifndef LIBRSFS_COMPRESSION_H
-#define LIBRSFS_COMPRESSION_H
+#pragma once
 
 #include <vector>
 #include "zlib/zlib.h"
@@ -11,7 +10,13 @@
 #include <exception>
 #include <stdexcept>
 #include <memory.h>
-//#include <lzma.h>
+
+#ifdef LZMA_FOUND
+#include <lzma.h>
+#pragma message("Compiling with LZMA support enabled.")
+#else
+#pragma message("LZMA libraries not detected by cmake, LZMA support not enabled.")
+#endif
 
 const static char *BZIP_HEADER = "BZh1";
 
@@ -39,6 +44,3 @@ public:
 	int GetCompressedSize();
 	int GetDecompressedSize();
 };
-
-#endif //LIBRSFS_COMPRESSION_H
-

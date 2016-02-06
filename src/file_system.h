@@ -42,7 +42,7 @@ inline bool IsFolder(char *file) {
  * Filesystem base class which will hold the main file reference and also contains a map of all the indices.
  * After constructing a new FileSystem, use FileSystem#LoadDirectory(char*).
  */
-class FileSystem {
+class RSFS_EXPORT FileSystem {
 public:
 	FileSystem();
 	~FileSystem();

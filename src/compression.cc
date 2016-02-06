@@ -63,7 +63,10 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 		delete strm;
 
 		return read;
-	}/* else if (compression_type == CompressionType::LZMA) {
+	}
+
+#ifdef LZMA_FOUND 
+	else if (compression_type == CompressionType::LZMA) {
 		std::vector<char> forged_input(original.size() - 9 + 8); // Properties, dict size and full size
 		forged_input.resize(original.size() - 9 + 8);
 
@@ -87,7 +90,10 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 
 		lzma_end(strm);
 		return (int) strm->total_out;
-	} */ else if (compression_type == CompressionType::NONE) { // If no compression just copy the bytes from O to D
+	}
+#endif 
+
+	else if (compression_type == CompressionType::NONE) { // If no compression just copy the bytes from O to D
 		memcpy(destination.data(), original.data() + 9, original.size() - 9);
 		return (int) (original.size() - 9);
 	}
