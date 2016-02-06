@@ -36,7 +36,7 @@ void FileSystem::LoadDirectory(char *directory) {
 	for (int index = 0; index <= 255; index++) {
 		int buffer_size = strlen(directory) + 1 + strlen("main_file_cache.idx") + 5;
 		char *full_path = new char[buffer_size];
-		sprintf_s(full_path, buffer_size, "%s/main_file_cache.idx%d", directory, index);
+		sprintf(full_path, "%s/main_file_cache.idx%d", directory, index);
 
 		// If this index file exists, put it in our library.
 		if (FileExists(const_cast<char*>(full_path))) {
