@@ -88,7 +88,7 @@ int Compression::Decompress(std::vector<char> &original, std::vector<char> &dest
 		lzma_end(strm);
 		return (int) strm->total_out;
 	} */ else if (compression_type == CompressionType::NONE) { // If no compression just copy the bytes from O to D
-		memcpy(destination.data(), original.data() + 9, original.size() - 9);
+		std::memcpy(destination.data(), original.data() + 9, original.size() - 9);
 		return (int) (original.size() - 9);
 	}
 
