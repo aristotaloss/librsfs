@@ -71,6 +71,9 @@ bool FileSystem::has_index(int index) {
 }
 
 Index *FileSystem::get_index(int directory_id) {
+	if (indices.find(directory_id) == indices.end())
+		return nullptr;
+
 	return indices.at(directory_id);
 }
 
