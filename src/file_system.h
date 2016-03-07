@@ -29,13 +29,13 @@ typedef int FSResult;
 class Index;
 
 inline bool file_exists(char *file) {
-	struct stat si;
-	return stat(file, &si) == 0;
+	struct _stat64 si;
+	return _stat64(file, &si) == 0;
 }
 
 inline bool is_folder(char *file) {
-	struct stat si;
-	return stat(file, &si) == 0 && (si.st_mode & S_IFDIR);
+	struct _stat64 si;
+	return _stat64(file, &si) == 0 && (si.st_mode & S_IFDIR);
 }
 
 /**
