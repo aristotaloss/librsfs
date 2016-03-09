@@ -17,7 +17,7 @@ using namespace std;
 class FileSystem;
 class FolderInfo;
 
-class Index {
+RSFS_EXPORT class Index {
 private:
 	FileSystem* file_system;
 	std::string index_file;
@@ -32,15 +32,15 @@ public:
      * number of non-empty data entries as a directory may contain a folder with ID 4 and one with ID 6 for example,
      * which will make this method return 6 even though only 2 are valid.
      */
-	int get_entry_count();
+	RSFS_EXPORT int get_entry_count();
 
-	FolderInfo get_folder_info(int id);
+	RSFS_EXPORT FolderInfo get_folder_info(int id);
 
-	std::string get_file();
+	RSFS_EXPORT std::string get_file();
 
-	int get_raw(int id, vector<char> &dest);
+	RSFS_EXPORT int get_raw(int id, vector<char> &dest);
 
-	int get_decompressed(int id, vector<char> &dest);
+	RSFS_EXPORT int get_decompressed(int id, vector<char> &dest);
 };
 
 
