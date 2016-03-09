@@ -28,15 +28,22 @@ typedef int FSResult;
 // Predeclarations
 class Index;
 
+#ifdef _WIN32
+#define stat_name _stat64
+#else
+#define stat_name stat
+#endif
+
 inline bool file_exists(char *file) {
-	struct _stat64 si;
-	return _stat64(file, &si) == 0;
+	struct stat_name si;
+	return stat_name(file, &si) == 0;
 }
 
 inline bool is_folder(char *file) {
-	struct _stat64 si;
-	return _stat64(file, &si) == 0 && (si.st_mode & S_IFDIR);
+	struct stat_name si;
+	return stat_name(file, &si) == 0 && (si.st_mode & S_IFDIR);
 }
+
 
 /**
  * Filesystem base class which will hold the main file reference and also contains a map of all the indices.
