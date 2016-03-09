@@ -16,10 +16,10 @@ if(LIBLZMA_FOUND)
 endif()
 
 # C++ flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -static-libgcc -static-libstdc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FILE_OFFSET_BITS=64 -std=c++11 -static-libgcc -static-libstdc++")
 
 # Our list of source files to include in this build
-set(SOURCE_FILES src/main.cc src/file_system.cc src/file_system.h src/librsfs.h src/compression.cc src/bzip2/bzlib.c src/bzip2/compress.c src/bzip2/decompress.c src/bzip2/crctable.c src/bzip2/huffman.c src/bzip2/randtable.c src/bzip2/blocksort.c)
+set(SOURCE_FILES src/main.cc src/file_system.cc src/file_system.h src/capi.h src/librsfs.h src/capi.cc src/compression.cc src/bzip2/bzlib.c src/bzip2/compress.c src/bzip2/decompress.c src/bzip2/crctable.c src/bzip2/huffman.c src/bzip2/randtable.c src/bzip2/blocksort.c)
 set(ZLIB_SOURCES src/zlib/adler32.c src/zlib/compress.c src/zlib/crc32.c src/zlib/deflate.c src/zlib/gzclose.c src/zlib/gzlib.c src/zlib/gzread.c src/zlib/gzwrite.c src/zlib/inflate.c src/zlib/inffast.c src/zlib/inftrees.c src/zlib/uncompr.c src/zlib/trees.c src/zlib/zutil.c)
 
 add_executable(librsfs ${SOURCE_FILES} ${ZLIB_SOURCES} src/index.cc src/index.h src/folder_info.cc src/folder_info.h src/compression.cc src/compression.h) # Define executable for command-line usage
