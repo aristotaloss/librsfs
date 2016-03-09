@@ -29,19 +29,19 @@ typedef int FSResult;
 class Index;
 
 #ifdef _WIN32
-#define stat_name _stat64
+#define STAT_NAME _stat64
 #else
-#define stat_name stat
+#define STAT_NAME stat
 #endif
 
 inline bool file_exists(char *file) {
-	struct stat_name si;
-	return stat_name(file, &si) == 0;
+	struct STAT_NAME si;
+	return STAT_NAME(file, &si) == 0;
 }
 
 inline bool is_folder(char *file) {
-	struct stat_name si;
-	return stat_name(file, &si) == 0 && (si.st_mode & S_IFDIR);
+	struct STAT_NAME si;
+	return STAT_NAME(file, &si) == 0 && (si.st_mode & S_IFDIR);
 }
 
 
