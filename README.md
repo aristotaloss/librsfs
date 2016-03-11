@@ -1,5 +1,6 @@
 # librsfs
 C++ library for the RuneScape file store
+[![Build Status](https://travis-ci.org/Velocity-/librsfs.svg?branch=master)](https://travis-ci.org/Velocity-/librsfs)
 
 # Filesystem structure
 The RuneScape file system consists of a three-level hierarchy, which can be illustrated as follows:
