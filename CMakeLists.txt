@@ -17,7 +17,7 @@ if(LIBLZMA_FOUND)
 endif()
 
 # C++ flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FILE_OFFSET_BITS=64 -std=c++11 -fPIC -static-libgcc -static-libstdc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FILE_OFFSET_BITS=64 -std=c++11 -fPIC")
 
 # Our list of source files to include in this build
 set(SOURCE_FILES src/main.cc src/file_system.cc src/file_system.h src/capi.h src/librsfs.h src/capi.cc src/compression.cc src/bzip2/bzlib.c src/bzip2/compress.c src/bzip2/decompress.c src/bzip2/crctable.c src/bzip2/huffman.c src/bzip2/randtable.c src/bzip2/blocksort.c)
