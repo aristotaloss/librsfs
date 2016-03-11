@@ -1,0 +1,13 @@
+language: cpp
+dist: trusty
+compiler:
+- clang
+- gcc
+os:
+- linux
+- osx
+branches:
+  only:
+  - master
+notifications:
+  email: false
